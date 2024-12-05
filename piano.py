@@ -59,18 +59,16 @@ class Piano:
         pygame.time.delay(500)  # Pequeno atraso para garantir que tudo esteja carregado
         print("Iniciando o loop principal do jogo...")
     def piano_loop_principal(self):
-        if True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    self.running = False
-            
-            # Atualizar jogo
-            self.spawn_notes()
-            self.update_notes()
-            self.draw_notes()
-            
-            
-            # Desenhar pontuação
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+
+        # Atualizar jogo
+        self.spawn_notes()
+        self.update_notes()
+        self.verificar_colisao()  # Verifique colisões para todas as teclas pressionadas
+
+
             
     def criar_esfera(self, letra):
         x = self.linhas[self.teclas.index(letra)]
@@ -80,18 +78,23 @@ class Piano:
         esfera = Bola(x, y, width, height,self.height,velocidade_bola=self.ball_speed)
         self.controlador.esferas.append(esfera)
         return esfera
-    def verificar_colisao(self, keys_pressed):
-        for i, hitbox in enumerate(self.hitboxes):
-            tecla_correta = keys_pressed[pygame.key.key_code(self.teclas[i].lower())]
-            for esfera in self.controlador.esferas:
-                if hitbox.colliderect(esfera.rect):
-                    if tecla_correta:
-                        print(f"{self.teclas[i]} OK")
+    def verificar_colisao(self):
+        """Verifica colisões de todas as esferas com as hitboxes para teclas pressionadas simultaneamente"""
+        keys_pressed = pygame.key.get_pressed()
+        
+        for i, hitbox in enumerate(self.hitboxes):  # Para cada hitbox
+            tecla = self.teclas[i]  # Tecla associada à hitbox
+            if keys_pressed[pygame.key.key_code(tecla)]:  # Se a tecla está pressionada
+                for esfera in self.controlador.esferas[:]:  # Verifique todas as esferas
+                    if hitbox.colliderect(esfera.rect):  # Colisão com a hitbox
+                        print(f"{tecla} OK")
+                        
+                        # Lógica adicional ao acertar a tecla
                         if self.tipo == "ataque":
                             self.score += self.incremento_score
+                        
                         esfera.acertou = True
-                        self.controlador.remover_esfera(esfera)
-                    return
+                        self.controlador.remover_esfera(esfera)  # Remova a esfera
 
     def get_score_geral(self):
         return self.score

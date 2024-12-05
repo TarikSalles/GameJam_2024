@@ -38,7 +38,7 @@ def main():
                     piano.criar_esfera(random.choice(letra_aleatoria))
 
         keys_pressed = pygame.key.get_pressed()
-        piano.verificar_colisao(keys_pressed)
+        #piano.verificar_colisao(keys_pressed)
             
 
 
