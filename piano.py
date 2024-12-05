@@ -87,7 +87,6 @@ class Piano:
         y = self.height
         width = 50
         height = 50
-        print()
         esfera = Bola(x, y, width, height,self.height,self.y_hitbox,velocidade_bola=self.ball_speed, tecla = self.teclas.index(letra), player=  self.player)
         self.controlador.esferas.append(esfera)
         return esfera

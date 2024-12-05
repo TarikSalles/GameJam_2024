@@ -12,17 +12,18 @@ def main():
     music_player1 =  Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
     music_player2 =  Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
 
-    score_player1 = 0
-    score_player2 = 0
+    score_player1 = 10
+    score_player2 = 10
     tempoAtual = 0.0
     tempoDuracao = 15.0
     turnoPlayer1 = True
     controlador_esferas_player_1 = ControladorEsferas()
     controlador_esferas_player_2 = ControladorEsferas()
+    incremento_score = 1
 
 
-    beats_player1 = Piano(controlador_esferas_player_1, width=screen_width / 2, height=screen_height / 2, tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = score_player1, tipo = "ataque",music=music_player1,teclas = [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d])
-    beats_player2 = Piano(controlador_esferas_player_2, width=screen_width / 2, height=screen_height / 2, tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = score_player2, tipo = "ataque",music=music_player2,init_x= screen_width / 2 + 50, init_y=0,teclas = [pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT],player=2)
+    beats_player1 = Piano(controlador_esferas_player_1, incremento_score= incremento_score,width=screen_width / 2, height=screen_height / 2, tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = score_player1, tipo = "ataque",music=music_player1,teclas = [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d])
+    beats_player2 = Piano(controlador_esferas_player_2, incremento_score= incremento_score,width=screen_width / 2, height=screen_height / 2, tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = score_player2, tipo = "ataque",music=music_player2,init_x= screen_width / 2 + 50, init_y=0,teclas = [pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT],player=2)
 
     beats_player1.run_music()
     beats_player2.run_music()
@@ -44,6 +45,8 @@ def main():
         for esfera in controlador_esferas_player_1.esferas:
                 esfera.mover() 
                 if (esfera.update()):
+                    if(esfera.acerto == False):
+                         beats_player1.score -= incremento_score
                     controlador_esferas_player_1.remover_esfera(esfera)
         
 
@@ -51,6 +54,8 @@ def main():
         for esfera in controlador_esferas_player_2.esferas:
                 esfera.mover() 
                 if esfera.update():
+                    if(esfera.acerto == False):
+                         beats_player2.score -= incremento_score
                     controlador_esferas_player_2.remover_esfera(esfera)
         
         #beats_player1.piano_loop_principal()

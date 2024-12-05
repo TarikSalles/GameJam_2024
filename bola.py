@@ -39,7 +39,6 @@ class Bola(pygame.sprite.Sprite):
         
     def update(self):
         # Verifica se a esfera ultrapassou o limite superior ou inferior da caixa de colisão
-        print(self.height)
         if self.rect.top + self.height_ball < 0:
             self.kill()
             return True
