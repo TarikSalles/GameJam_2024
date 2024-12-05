@@ -1,7 +1,7 @@
 import pygame
 import random
-from Vida import Vida
-from Especial import Especial
+from vida import Vida
+from especial import Especial
 
 class Personagem:
     def __init__(self, posicao_personagem, tamanho_personagem, max_vida, max_especial,
@@ -66,14 +66,14 @@ class Personagem:
         # Flags de controle
         self.sofreu_dano = False
         self.em_ataque = False  # Flag para indicar se o personagem está atacando
-
+    
         # Calcula o tamanho das barras de vida e especial proporcional ao tamanho do personagem
+        
         largura_barra = self.tamanho_desejada[0]
-        altura_barra = self.tamanho_desejada[1] * 0.1  # 10% da altura do personagem
-
-        # Calcula a posição das barras acima do personagem
-        posicao_vida = (self.posicao[0], self.posicao[1] - altura_barra * 2 - 10)
-        posicao_especial = (self.posicao[0], self.posicao[1] - altura_barra - 5)
+        altura_barra = self.tamanho_desejada[1] * 0.1
+        
+        posicao_vida = (self.posicao[0], self.posicao[1] + self.tamanho_desejada[1] + 5)
+        posicao_especial = (self.posicao[0], self.posicao[1] + self.tamanho_desejada[1] + altura_barra + 10)
 
         # Inicializa vida e especial com as posições e tamanhos calculados
         self.vida = Vida(
@@ -88,6 +88,7 @@ class Personagem:
             tamanho_sprite=(largura_barra, altura_barra),
             pasta_sprites=pasta_sprites_especial
         )
+        
 
     def carregar_frames(self, spritesheet, num_cols):
         frames = []
@@ -180,8 +181,3 @@ class Personagem:
     def mover(self, nova_posicao):
         # Atualiza a posição do personagem
         self.posicao = nova_posicao
-
-        # Recalcula as posições das barras com base na nova posição
-        altura_barra = self.tamanho_desejada[1] * 0.1
-        self.vida.posicao = (self.posicao[0], self.posicao[1] - altura_barra * 2 - 10)
-        self.especial.posicao = (self.posicao[0], self.posicao[1] - altura_barra - 5)

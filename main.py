@@ -4,9 +4,10 @@ from Personagem import Personagem
 # Inicialização do Pygame
 pygame.init()
 
-# Configurações da Tela
-LARGURA, ALTURA = 1920, 1080  # Ajustei para uma resolução mais comum
-TELA = pygame.display.set_mode((LARGURA, ALTURA))
+# Definir a resolução mínima da tela
+LARGURA_MINIMA, ALTURA_MINIMA = 1280, 720  # Resolução mínima
+LARGURA_INICIAL, ALTURA_INICIAL = 1920, 1080  # Resolução inicial
+TELA = pygame.display.set_mode((LARGURA_INICIAL, ALTURA_INICIAL), pygame.RESIZABLE)
 pygame.display.set_caption("Jogo com Vida e Especial")
 
 # Cores
@@ -20,31 +21,61 @@ FPS = 60
 # Fonte para textos
 FONTE = pygame.font.Font(None, 50)
 
-# Criação dos personagens com posição e tamanho
+# Carregar o fundo
+background = pygame.image.load("./sprites/tela/background.png")
+
+# Função para redimensionar o fundo
+def redimensionar_fundo(tela_largura, tela_altura):
+    return pygame.transform.scale(background, (tela_largura, tela_altura))
+
+# Função para redimensionar os personagens e suas barras
+def redimensionar_personagens(personagens, tela_largura, tela_altura):
+    fator_largura = tela_largura / LARGURA_INICIAL
+    fator_altura = tela_altura / ALTURA_INICIAL
+    for p in personagens:
+        # Atualiza o tamanho desejado dos personagens, mas mantém a posição x
+        nova_largura = int(p.tamanho_desejada[0] * fator_largura)
+        nova_altura = int(p.tamanho_desejada[1] * fator_altura)
+        p.tamanho_desejada = (nova_largura, nova_altura)  # Atualiza o tamanho desejado
+        p.posicao = (
+            p.posicao[0],  # Mantém a posição x original
+            p.posicao[1]   # Mantém a posição y original
+        )
+        
+        # Atualiza a posição das barras de vida e especial com base no novo tamanho e posição do personagem
+        p.vida.posicao = (p.posicao[0], p.posicao[1] - 30)  # Ajuste a posição vertical conforme necessário
+        p.especial.posicao = (p.posicao[0], p.posicao[1] - 60)  # Ajuste a posição vertical conforme necessário
+
+# Definir um pequeno deslocamento para a esquerda e direita do centro
+deslocamento_esquerda = -150  # Personagem 1 ficará um pouco à esquerda
+deslocamento_direita = 100    # Personagem 2 ficará um pouco à direita
+tela_largura = pygame.display.get_surface().get_width()
+
+# Criação dos personagens com a nova posição
 personagem1 = Personagem(
-    posicao_personagem=(200, 300),
+    posicao_personagem=((tela_largura // 2) + deslocamento_esquerda, 300),
     tamanho_personagem=(200, 300),
     max_vida=10,
     max_especial=10,
     pasta_sprites_vida="sprites/vida",
     pasta_sprites_especial="sprites/especial",
-    caminho_sprites="sprites/personagem/Jogador_1/",  # Verifique se está correto
-    nome_personagem="Punk",
-    num_cols_idle=4,  # Número de colunas na spritesheet idle
+    caminho_sprites="sprites/personagem/Jogador_1/",
+    nome_personagem="Biker",
+    num_cols_idle=4,
     num_cols_dano=2,
     num_cols_attack1=6,
     num_cols_attack2_3=8,
 )
 
 personagem2 = Personagem(
-    posicao_personagem=(500, 300),
+    posicao_personagem=((tela_largura // 2) + deslocamento_direita, 300),
     tamanho_personagem=(200, 300),
     max_vida=10,
     max_especial=10,
     pasta_sprites_vida="sprites/vida",
     pasta_sprites_especial="sprites/especial",
-    caminho_sprites="sprites/personagem/Jogador_2/",  # Verifique se está correto
-    nome_personagem="Biker",
+    caminho_sprites="sprites/personagem/Jogador_2/",
+    nome_personagem="Punk",
     num_cols_idle=4,
     num_cols_dano=2,
     num_cols_attack1=6,
@@ -52,19 +83,30 @@ personagem2 = Personagem(
     invert_frames=True
 )
 
-tempo_morte_p1 = None  # Tempo de morte do personagem 1
-tempo_morte_p2 = None  # Tempo de morte do personagem 2
-tempo_espera_game_over = 2000  # Tempo em milissegundos para exibir "Game Over"
-vencedor = None  # Armazena o vencedor da partida
+
+# Lista de personagens para redimensionamento fácil
+personagens = [personagem1, personagem2]
+
+# Variáveis de controle para o estado de "Game Over"
+tempo_morte_p1 = None
+tempo_morte_p2 = None
+tempo_espera_game_over = 2000
+vencedor = None
 
 # Flags para controlar a aplicação de dano após ataque
 ataque_personagem1 = False
-ataque_personagem2 = False  # Se necessário
+ataque_personagem2 = False
 
 # Loop Principal
 rodando = True
 while rodando:
     delta_tempo = RELOGIO.tick(FPS) / 1000.0  # Delta de tempo em segundos
+
+    # Redimensionamento dinâmico da tela
+    tela_largura, tela_altura = TELA.get_size()
+    tela_largura = max(tela_largura, LARGURA_MINIMA)  # Garantir a largura mínima
+    tela_altura = max(tela_altura, ALTURA_MINIMA)    # Garantir a altura mínima
+    fundo_redimensionado = redimensionar_fundo(tela_largura, tela_altura)
 
     # Eventos
     for evento in pygame.event.get():
@@ -118,8 +160,11 @@ while rodando:
         personagem1.levar_dano(1)
         ataque_personagem2 = False
 
+    # Redimensiona os personagens com base no tamanho da tela
+    redimensionar_personagens(personagens, tela_largura, tela_altura)
+
     # Desenho na tela
-    TELA.fill(PRETO)
+    TELA.blit(fundo_redimensionado, (0, 0))  # Desenha o fundo
     personagem1.desenhar(TELA)
     personagem2.desenhar(TELA)
 
@@ -141,30 +186,3 @@ while rodando:
 
     # Atualiza a tela
     pygame.display.flip()
-
-# Tela de vitória
-if vencedor:
-    rodando = True
-    while rodando:
-        for evento in pygame.event.get():
-            if evento.type == pygame.QUIT:
-                rodando = False
-            if evento.type == pygame.KEYDOWN:
-                if evento.key == pygame.K_RETURN:  # Pressione Enter para sair
-                    rodando = False
-
-        TELA.fill(PRETO)
-        texto_vitoria = FONTE.render(f"{vencedor} venceu!", True, BRANCO)
-        TELA.blit(texto_vitoria, (
-            LARGURA // 2 - texto_vitoria.get_width() // 2, 
-            ALTURA // 2 - texto_vitoria.get_height() // 2
-        ))
-        texto_instrucao = FONTE.render("Pressione Enter para sair", True, BRANCO)
-        TELA.blit(texto_instrucao, (
-            LARGURA // 2 - texto_instrucao.get_width() // 2, 
-            ALTURA // 2 + texto_vitoria.get_height()
-        ))
-
-        pygame.display.flip()
-
-pygame.quit()
