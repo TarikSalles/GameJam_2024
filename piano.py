@@ -11,9 +11,10 @@ font = pygame.font.Font(None, 36)
 
 
 class Piano:
-    def __init__(self, controlador, init_x=0, init_y=0, width=800, height=600, tamanho_linha_width=0, tamanho_linha_height=0, score=0, tipo="ataque", incremento_score=0, music=None,teclas = ["W","A","S","D"]):
+    def __init__(self, controlador, init_x=0, init_y=0, width=800, height=600, tamanho_linha_width=0, tamanho_linha_height=0, score=0, tipo="ataque", incremento_score=0, music=None,teclas = ["W","A","S","D"], player = 1):
         self.controlador = controlador
         self.init_x = init_x
+        self.player = player
         self.init_y = init_y
         self.width = width
         self.key_map = {
@@ -40,8 +41,9 @@ class Piano:
         self.tamanho_hitbox = 20
         self.min = 0
         self.ball_speed = -2
+        self.y_hitbox = self.init_y + self.init_y + self.tamanho_hitbox * 3
         self.hitboxes = [
-            pygame.Rect(linha - self.tamanho_hitbox // 2, init_y + self.init_y + self.tamanho_hitbox * 3, self.tamanho_hitbox, self.tamanho_hitbox)
+            pygame.Rect(linha - self.tamanho_hitbox // 2, self.y_hitbox, self.tamanho_hitbox, self.tamanho_hitbox)
             for linha in self.linhas
         ]
    
@@ -79,11 +81,14 @@ class Piano:
 
             
     def criar_esfera(self, letra):
+        
         x = self.linhas[self.teclas.index(letra)]
+
         y = self.height
-        width = 10
-        height = 10
-        esfera = Bola(x, y, width, height,self.height,velocidade_bola=self.ball_speed)
+        width = 50
+        height = 50
+        print()
+        esfera = Bola(x, y, width, height,self.height,self.y_hitbox,velocidade_bola=self.ball_speed, tecla = self.teclas.index(letra), player=  self.player)
         self.controlador.esferas.append(esfera)
         return esfera
     def verificar_colisao(self):
@@ -101,7 +106,8 @@ class Piano:
                         self.score += self.incremento_score
                         
                         esfera.acertou = True
-                        self.controlador.remover_esfera(esfera)  # Remova a esfera
+                        esfera.bola_acerto()
+                        #self.controlador.remover_esfera(esfera)  # Remova a esfera
 
     def get_score_geral(self):
         return self.score
