@@ -1,5 +1,6 @@
 import pygame
 from Personagem import Personagem
+from fim import exibir_tela_fim_jogo
 
 # Inicialização do Pygame
 pygame.init()
@@ -51,35 +52,22 @@ deslocamento_esquerda = -150  # Personagem 1 ficará um pouco à esquerda
 deslocamento_direita = 100    # Personagem 2 ficará um pouco à direita
 tela_largura = pygame.display.get_surface().get_width()
 
+jogador1 = "Biker"
+jogador2 = "Punk"
+
 # Criação dos personagens com a nova posição
 personagem1 = Personagem(
     posicao_personagem=((tela_largura // 2) + deslocamento_esquerda, 300),
     tamanho_personagem=(200, 300),
-    max_vida=10,
-    max_especial=10,
-    pasta_sprites_vida="sprites/vida",
-    pasta_sprites_especial="sprites/especial",
     caminho_sprites="sprites/personagem/Jogador_1/",
-    nome_personagem="Biker",
-    num_cols_idle=4,
-    num_cols_dano=2,
-    num_cols_attack1=6,
-    num_cols_attack2_3=8,
+    nome_personagem=jogador1,
 )
 
 personagem2 = Personagem(
     posicao_personagem=((tela_largura // 2) + deslocamento_direita, 300),
     tamanho_personagem=(200, 300),
-    max_vida=10,
-    max_especial=10,
-    pasta_sprites_vida="sprites/vida",
-    pasta_sprites_especial="sprites/especial",
     caminho_sprites="sprites/personagem/Jogador_2/",
-    nome_personagem="Punk",
-    num_cols_idle=4,
-    num_cols_dano=2,
-    num_cols_attack1=6,
-    num_cols_attack2_3=8,
+    nome_personagem=jogador2,
     invert_frames=True
 )
 
@@ -171,7 +159,7 @@ while rodando:
     # Verificação de "Game Over" para Personagem 1
     if personagem1.vida.vida_atual == 0:
         if tempo_morte_p1 and pygame.time.get_ticks() - tempo_morte_p1 > tempo_espera_game_over:
-            vencedor = "Punk"
+            vencedor = '2'
             rodando = False
     else:
         tempo_morte_p1 = None
@@ -179,10 +167,15 @@ while rodando:
     # Verificação de "Game Over" para Personagem 2
     if personagem2.vida.vida_atual == 0:
         if tempo_morte_p2 and pygame.time.get_ticks() - tempo_morte_p2 > tempo_espera_game_over:
-            vencedor = "Biker"
+            vencedor = '1'
             rodando = False
     else:
         tempo_morte_p2 = None
+    
+    if not rodando:
+        exibir_tela_fim_jogo(TELA, vencedor)
 
     # Atualiza a tela
     pygame.display.flip()
+
+pygame.quit()

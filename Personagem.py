@@ -4,9 +4,9 @@ from vida import Vida
 from especial import Especial
 
 class Personagem:
-    def __init__(self, posicao_personagem, tamanho_personagem, max_vida, max_especial,
-                 pasta_sprites_vida, pasta_sprites_especial, caminho_sprites, nome_personagem, 
-                 num_cols_idle, num_cols_dano, num_cols_attack1, num_cols_attack2_3, num_cols_morte=6, num_cols_corrida=6, num_cols_pulo=6, invert_frames = False):
+    def __init__(self, posicao_personagem, tamanho_personagem,caminho_sprites, nome_personagem,
+                 max_vida=10, max_especial=10, pasta_sprites_vida="sprites/vida", pasta_sprites_especial="sprites/especial", 
+                 num_cols_idle=4, num_cols_dano=2, num_cols_attack1=6, num_cols_attack2_3=8, num_cols_morte=6, num_cols_corrida=6, num_cols_pulo=6, invert_frames = False):
         self.nome_personagem = nome_personagem  # Para uso no debug
         self.posicao = posicao_personagem  # Posição do personagem (x, y)
         self.tamanho_desejada = tamanho_personagem  # Tamanho desejado (largura, altura)
@@ -151,11 +151,12 @@ class Personagem:
                     self.frames = self.animacoes[self.animacao_atual]
                     
                 if self.animacao_atual in ["morte"]:
-                    # Retorna para o frame final da animação de morte
+                    self.morto = True
                     self.frame_atual = len(self.frames) - 1
                     
                 else:
                     self.frame_atual = 0
+                    
                 if self.em_ataque:
                     self.em_ataque = False  # Ataque finalizado
 
@@ -178,6 +179,4 @@ class Personagem:
             self.frames = self.animacoes[self.animacao_atual]
             self.frame_atual = 0
 
-    def mover(self, nova_posicao):
-        # Atualiza a posição do personagem
-        self.posicao = nova_posicao
+    
