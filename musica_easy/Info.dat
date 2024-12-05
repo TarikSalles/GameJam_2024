@@ -1,0 +1,276 @@
+{
+  "_version": "2.1.0",
+  "_songName": "Creator",
+  "_songSubName": "",
+  "_songAuthorName": "Lena Raine",
+  "_levelAuthorName": "Hellocreeper88",
+  "_beatsPerMinute": 162.0,
+  "_songTimeOffset": 0.0,
+  "_shuffle": 0.0,
+  "_shufflePeriod": 0.5,
+  "_previewStartTime": 81.0,
+  "_previewDuration": 10.0,
+  "_songFilename": "song.egg",
+  "_coverImageFilename": "cover.png",
+  "_environmentName": "BigMirrorEnvironment",
+  "_allDirectionsEnvironmentName": "GlassDesertEnvironment",
+  "_environmentNames": [],
+  "_colorSchemes": [],
+  "_customData": {
+    "_contributors": [
+      {
+        "_role": "Mapper",
+        "_name": "Hellocreeper88",
+        "_iconPath": "Hellocreeper88.png"
+      },
+      {
+        "_role": "Song Creator",
+        "_name": "Lena Raine",
+        "_iconPath": "Lena Raine.png"
+      }
+    ],
+    "_editors": {
+      "_lastEditedBy": "ChroMapper",
+      "ChroMapper": {
+        "version": "0.10.779"
+      }
+    }
+  },
+  "_difficultyBeatmapSets": [
+    {
+      "_beatmapCharacteristicName": "Standard",
+      "_difficultyBeatmaps": [
+        {
+          "_difficulty": "Easy",
+          "_difficultyRank": 1,
+          "_beatmapFilename": "EasyStandard.dat",
+          "_noteJumpMovementSpeed": 10,
+          "_noteJumpStartBeatOffset": 1.4,
+          "_beatmapColorSchemeIdx": 0,
+          "_environmentNameIdx": 0,
+          "_customData": {
+            "_colorLeft": {
+              "r": 0.906,
+              "g": 0.369,
+              "b": 0.165
+            },
+            "_colorRight": {
+              "r": 0.248,
+              "g": 0.715,
+              "b": 0.599
+            },
+            "_envColorLeft": {
+              "r": 0.898,
+              "g": 0.533,
+              "b": 0.231
+            },
+            "_envColorRight": {
+              "r": 0.075,
+              "g": 0.376,
+              "b": 0.2
+            },
+            "_envColorLeftBoost": {
+              "r": 0.388,
+              "g": 0.18,
+              "b": 0.4
+            },
+            "_envColorRightBoost": {
+              "r": 0,
+              "g": 0.212,
+              "b": 0.757
+            },
+            "_obstacleColor": {
+              "r": 0.706,
+              "g": 0.392,
+              "b": 1
+            }
+          }
+        },
+        {
+          "_difficulty": "Normal",
+          "_difficultyRank": 3,
+          "_beatmapFilename": "NormalStandard.dat",
+          "_noteJumpMovementSpeed": 12,
+          "_noteJumpStartBeatOffset": -0.625,
+          "_beatmapColorSchemeIdx": 0,
+          "_environmentNameIdx": 0,
+          "_customData": {
+            "_colorLeft": {
+              "r": 0.906,
+              "g": 0.369,
+              "b": 0.165
+            },
+            "_colorRight": {
+              "r": 0.248,
+              "g": 0.715,
+              "b": 0.599
+            },
+            "_envColorLeft": {
+              "r": 0.898,
+              "g": 0.533,
+              "b": 0.231
+            },
+            "_envColorRight": {
+              "r": 0.075,
+              "g": 0.376,
+              "b": 0.2
+            },
+            "_envColorLeftBoost": {
+              "r": 0.388,
+              "g": 0.18,
+              "b": 0.4
+            },
+            "_envColorRightBoost": {
+              "r": 0,
+              "g": 0.212,
+              "b": 0.757
+            },
+            "_obstacleColor": {
+              "r": 0.706,
+              "g": 0.392,
+              "b": 1
+            }
+          }
+        },
+        {
+          "_difficulty": "Hard",
+          "_difficultyRank": 5,
+          "_beatmapFilename": "HardStandard.dat",
+          "_noteJumpMovementSpeed": 14,
+          "_noteJumpStartBeatOffset": 0.604,
+          "_beatmapColorSchemeIdx": 0,
+          "_environmentNameIdx": 0,
+          "_customData": {
+            "_colorLeft": {
+              "r": 0.906,
+              "g": 0.369,
+              "b": 0.165
+            },
+            "_colorRight": {
+              "r": 0.248,
+              "g": 0.715,
+              "b": 0.599
+            },
+            "_envColorLeft": {
+              "r": 0.898,
+              "g": 0.533,
+              "b": 0.231
+            },
+            "_envColorRight": {
+              "r": 0.075,
+              "g": 0.376,
+              "b": 0.2
+            },
+            "_envColorLeftBoost": {
+              "r": 0.388,
+              "g": 0.18,
+              "b": 0.4
+            },
+            "_envColorRightBoost": {
+              "r": 0,
+              "g": 0.212,
+              "b": 0.757
+            },
+            "_obstacleColor": {
+              "r": 0.706,
+              "g": 0.392,
+              "b": 1
+            }
+          }
+        },
+        {
+          "_difficulty": "Expert",
+          "_difficultyRank": 7,
+          "_beatmapFilename": "ExpertStandard.dat",
+          "_noteJumpMovementSpeed": 15,
+          "_noteJumpStartBeatOffset": 0.25,
+          "_beatmapColorSchemeIdx": 0,
+          "_environmentNameIdx": 0,
+          "_customData": {
+            "_colorLeft": {
+              "r": 0.906,
+              "g": 0.369,
+              "b": 0.165
+            },
+            "_colorRight": {
+              "r": 0.248,
+              "g": 0.715,
+              "b": 0.599
+            },
+            "_envColorLeft": {
+              "r": 0.898,
+              "g": 0.533,
+              "b": 0.231
+            },
+            "_envColorRight": {
+              "r": 0.075,
+              "g": 0.376,
+              "b": 0.2
+            },
+            "_envColorLeftBoost": {
+              "r": 0.388,
+              "g": 0.18,
+              "b": 0.4
+            },
+            "_envColorRightBoost": {
+              "r": 0,
+              "g": 0.212,
+              "b": 0.757
+            },
+            "_obstacleColor": {
+              "r": 0.706,
+              "g": 0.392,
+              "b": 1
+            }
+          }
+        },
+        {
+          "_difficulty": "ExpertPlus",
+          "_difficultyRank": 9,
+          "_beatmapFilename": "ExpertPlusStandard.dat",
+          "_noteJumpMovementSpeed": 17,
+          "_noteJumpStartBeatOffset": -0.35,
+          "_beatmapColorSchemeIdx": 0,
+          "_environmentNameIdx": 0,
+          "_customData": {
+            "_colorLeft": {
+              "r": 0.906,
+              "g": 0.369,
+              "b": 0.165
+            },
+            "_colorRight": {
+              "r": 0.248,
+              "g": 0.715,
+              "b": 0.599
+            },
+            "_envColorLeft": {
+              "r": 0.898,
+              "g": 0.533,
+              "b": 0.231
+            },
+            "_envColorRight": {
+              "r": 0.075,
+              "g": 0.376,
+              "b": 0.2
+            },
+            "_envColorLeftBoost": {
+              "r": 0.388,
+              "g": 0.18,
+              "b": 0.4
+            },
+            "_envColorRightBoost": {
+              "r": 0,
+              "g": 0.212,
+              "b": 0.757
+            },
+            "_obstacleColor": {
+              "r": 0.706,
+              "g": 0.392,
+              "b": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
