@@ -27,7 +27,7 @@ class Bola(pygame.sprite.Sprite):
         self.image = pygame.image.load(image_path).convert_alpha()
         self.image = pygame.transform.scale(self.image, (width, height))
         if(self.player == 2):
-             self.image = pygame.transform.scale(self.image, (width // 2, height //2))
+             self.image = pygame.transform.scale(self.image, (width //2, height //2))
         self.width_ball = width
         self.height_ball = height
         self.rect = self.image.get_rect(center=(x, y))
@@ -88,7 +88,7 @@ class Bola(pygame.sprite.Sprite):
         self.image = pygame.image.load(image_path).convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.width_ball, self.height_ball))
         if(self.player == 2):
-             self.image = pygame.transform.scale(self.image, (self.width_ball // 2, self.height_ball //2))
+             self.image = pygame.transform.scale(self.image, (self.width_ball, self.height_ball ))
 
         self.rect = self.image.get_rect(center=self.rect.center)
         self.acerto = True
