@@ -7,21 +7,21 @@ class Bola(pygame.sprite.Sprite):
         self.y_hitbox = y_hitbox
         super().__init__()
         if(tecla == 1 and player == 1):
-            image_path="Assets/a_subindo.png"
+            image_path="assets/a_subindo.png"
         elif(tecla == 2 and player == 1):
-            image_path="Assets/s_subindo.png"
+            image_path="assets/s_subindo.png"
         elif(tecla == 3 and player == 1):
-            image_path="Assets/d_subindo.png"
+            image_path="assets/d_subindo.png"
         elif(tecla == 0 and player == 1):
-            image_path="Assets/w_subindo.png"
+            image_path="assets/w_subindo.png"
         elif(tecla == 0 and player == 2):
-            image_path="Assets/cima_subindo.png"
+            image_path="assets/cima_subindo.png"
         elif(tecla == 2 and player == 2):
-            image_path="Assets/baixo_subindo.png"
+            image_path="assets/baixo_subindo.png"
         elif(tecla == 1 and player == 2):
-            image_path="Assets/esq_subindo.png"
+            image_path="assets/esq_subindo.png"
         elif(tecla == 3 and player == 2):
-            image_path="Assets/dir_subindo.png"
+            image_path="assets/dir_subindo.png"
 
         
         self.image = pygame.image.load(image_path).convert_alpha()
@@ -44,21 +44,21 @@ class Bola(pygame.sprite.Sprite):
             return True
         if self.rect.top < self.y_hitbox and self.acerto == False:
             if(self.tecla == 1 and self.player == 1):
-                image_path="Assets/a_acerto.png"
+                image_path="assets/a_acerto.png"
             elif(self.tecla == 2 and self.player == 1):
-                    image_path="Assets/s_clicado.png"
+                    image_path="assets/s_clicado.png"
             elif(self.tecla == 3 and self.player == 1):
-                    image_path="Assets/d_clicado.png"
+                    image_path="assets/d_clicado.png"
             elif(self.tecla == 0 and self.player == 1):
-                    image_path="Assets/w_clicado.png"
+                    image_path="assets/w_clicado.png"
             elif(self.tecla == 0 and self.player == 2):
-                    image_path="Assets/cima_clicado.png"
+                    image_path="assets/cima_clicado.png"
             elif(self.tecla == 2 and self.player == 2):
-                    image_path="Assets/baixo_clicado.png"
+                    image_path="assets/baixo_clicado.png"
             elif(self.tecla == 1 and self.player == 2):
-                    image_path="Assets/esq_clicado.png"
+                    image_path="assets/esq_clicado.png"
             elif(self.tecla == 3 and self.player == 2):
-                    image_path="Assets/dir_clicado.png"
+                    image_path="assets/dir_clicado.png"
             
         return False 
     def mover(self):
@@ -67,21 +67,21 @@ class Bola(pygame.sprite.Sprite):
     
     def bola_acerto(self):
         if(self.tecla == 1 and self.player == 1):
-            image_path="Assets/a_acerto.png"
+            image_path="assets/a_acerto.png"
         elif(self.tecla == 2 and self.player == 1):
-            image_path="Assets/s_acerto.png"
+            image_path="assets/s_acerto.png"
         elif(self.tecla == 3 and self.player == 1):
-            image_path="Assets/d_acerto.png"
+            image_path="assets/d_acerto.png"
         elif(self.tecla == 0 and self.player == 1):
-            image_path="Assets/w_acerto.png"
+            image_path="assets/w_acerto.png"
         elif(self.tecla == 0 and self.player == 2):
-            image_path="Assets/cima_acerto.png"
+            image_path="assets/cima_acerto.png"
         elif(self.tecla == 2 and self.player == 2):
-            image_path="Assets/baixo_acerto.png"
+            image_path="assets/baixo_acerto.png"
         elif(self.tecla == 1 and self.player == 2):
-            image_path="Assets/esq_acerto.png"
+            image_path="assets/esq_acerto.png"
         elif(self.tecla == 3 and self.player == 2):
-            image_path="Assets/dir_acerto.png"
+            image_path="assets/dir_acerto.png"
 
         
         self.image = pygame.image.load(image_path).convert_alpha()
