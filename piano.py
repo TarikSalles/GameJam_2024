@@ -14,12 +14,15 @@ font = pygame.font.Font(None, 36)
 
 # Classe Piano
 class Piano:
-    def __init__(self, controlador, width=800, height=600, tamanho_linha_width=700, tamanho_linha_height=100):
+    def __init__(self, controlador, width=800, height=600, tamanho_linha_width=0, tamanho_linha_height=0, score = 0, tipo = "ataque", incremento_score = 0):
         self.controlador = controlador
         self.width = width
         self.height = height
+        self.incremento_score = incremento_score
         self.tamanho_linha_width = tamanho_linha_width  # Largura das linhas verticais
         self.tamanho_linha_height = tamanho_linha_height  # Distância vertical entre as linhas
+        self.score = score
+        self.tipo = tipo
         self.linhas = [100, 200, 300, 400]  # Posições verticais das linhas
         self.teclas = ["W", "A", "S", "D"]  # Teclas que controlam as esferas
         self.tamanho_hitbox = 20
@@ -32,9 +35,10 @@ class Piano:
         # Desenhar as linhas verticais
         for i, y in enumerate(self.linhas):
     
-            pygame.draw.line(screen, black, (y, 0), (y, self.height), 3)
+            #pygame.draw.line(screen, black, (y, 0), (y, self.height), 3)
+
             tecla_surface = font.render(self.teclas[i], True, black)
-            screen.blit(tecla_surface, (y, self.height - 50))
+            screen.blit(tecla_surface, (y - tecla_surface.get_width() / 2, self.height - 50))
 
         # Desenhar hitboxes
         for hitbox in self.hitboxes:
@@ -60,9 +64,15 @@ class Piano:
                 if hitbox.colliderect(esfera.rect):
                     if tecla_correta:
                         print(f"{self.teclas[i]} OK")
+                        if self.tipo == "ataque":
+                            self.score += self.incremento_score
+                      
+                            
                         esfera.acertou = True
                         self.controlador.remover_esfera(esfera)
                     
                     return
+    def get_score_geral(self):
+        return self.score
 
 
