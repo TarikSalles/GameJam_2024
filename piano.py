@@ -16,6 +16,9 @@ class Piano:
         self.init_x = init_x
         self.player = player
         self.init_y = init_y
+        self.width_player2 = width // 32
+        self.width_player1 = width // 16
+
         self.width = width
         self.key_map = {
     pygame.K_w: 'W',
@@ -53,7 +56,22 @@ class Piano:
 
         for i, y in enumerate(self.linhas):
     
-            key_text = self.key_map[self.teclas[i]] 
+            key_text = self.key_map[self.teclas[i]]
+            if(self.player == 1):
+                image = pygame.image.load(f"assets/{key_text.lower()}_normal.png")
+                image = pygame.transform.scale(image, (self.width_player2, self.width_player2))
+                screen.blit(image, self.hitboxes[i].topleft)
+            if(self.player == 2):
+                if(key_text == "↑"):
+                    image = pygame.image.load(f"assets/cima_normal.png")
+                if(key_text == "→"):
+                    image = pygame.image.load(f"assets/dir_normal.png")
+                if(key_text == "←"):
+                    image = pygame.image.load(f"assets/esq_normal.png")
+                if(key_text == "→"):
+                    image = pygame.image.load(f"assets/dir_normal.png")
+                image = pygame.transform.scale(image, (self.width_player2, self.width_player2))
+                screen.blit(image, self.hitboxes[i].topleft)
             tecla_surface = font.render(key_text, True, black)
             screen.blit(tecla_surface, (y - tecla_surface.get_width() / 2, self.init_x + tecla_surface.get_height()))
 
