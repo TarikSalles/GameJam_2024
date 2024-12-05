@@ -91,11 +91,22 @@ def main():
     gerenciador_personagens = GerenciadorPersonagens(LARGURA_INICIAL)
     
     # Inicialização do Controlador de Esferas
-    gerenciador_esferas = ControladorEsferas()
+    controlador_esferas_player_1 = ControladorEsferas()
+    controlador_esferas_player_2 = ControladorEsferas()
     
     # Inicialização dos Componentes do Piano
-    piano_player1 = Piano(...)  # Passe os parâmetros necessários
-    piano_player2 = Piano(...)  # Passe os parâmetros necessários
+    score_player1 = 10
+    score_player2 = 10
+    tempoAtual = 0.0
+    tempoDuracao = 15.0
+    turnoPlayer1 = True
+    incremento_score = 1
+    tamanho_linha_width = 700
+    tamanho_linha_height = 100
+
+    piano_player1 = Piano(controlador_esferas_player_1, incremento_score= incremento_score,width=LARGURA_INICIAL / 2, height=ALTURA_INICIAL / 2, tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = score_player1, tipo = "ataque",music=music_player1,teclas = [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d])
+    piano_player2 = Piano(controlador_esferas_player_2, incremento_score= incremento_score,width=LARGURA_INICIAL / 2, height=ALTURA_INICIAL / 2, tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = score_player2, tipo = "ataque",music=music_player2,init_x= LARGURA_INICIAL / 2 + 50, init_y=0,teclas = [pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT],player=2)
+
     
     # Variáveis de Controle
     score_player1 = 0
@@ -194,12 +205,25 @@ def main():
 
         # Desenho na tela
         TELA.blit(fundo_redimensionado, (0, 0))  # Desenha o fundo
-        gerenciador_esferas.desenhar(TELA)
+        for esfera in controlador_esferas_player_1.esferas:
+                esfera.mover() 
+                if (esfera.update()):
+                    if(esfera.acerto == False):
+                         piano_player1.score -= incremento_score
+                    controlador_esferas_player_1.remover_esfera(esfera)
+        
+
+      
+        for esfera in controlador_esferas_player_2.esferas:
+                esfera.mover() 
+                if esfera.update():
+                    if(esfera.acerto == False):
+                         piano_player2.score -= incremento_score
+                    controlador_esferas_player_2.remover_esfera(esfera)
+        
         gerenciador_personagens.desenhar_personagens(TELA)
         piano_player1.desenhar(TELA)
         piano_player2.desenhar(TELA)
-        piano_player1.desenhar_notes(TELA)
-        piano_player2.desenhar_notes(TELA)
         
         pygame.display.flip()
         
