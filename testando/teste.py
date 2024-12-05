@@ -2,123 +2,126 @@ import pygame
 import json
 import os
 
-class Music:
-    def __init__(self, info_path, beatmap_path, audio_path):
-        print("Inicializando a classe Music...")
-        self.info = self.load_json(info_path)
-        self.beatmap = self.load_json(beatmap_path)
-        self.audio_path = audio_path
-        self.bpm = self.info.get("_beatsPerMinute", 120.0)
-        self.notes = self.parse_notes()
-        self.bolinhas = []
-        self.tempo_inicio = None
-        pygame.mixer.init()
-        print("Mixer inicializado.")
-    
-    def load_json(self, path):
-        print(f"Carregando JSON: {path}")
-        with open(path, 'r') as f:
-            return json.load(f)
-    
-    def parse_notes(self):
-        print("Parseando notas...")
-        notes = []
-        for note in self.beatmap.get("colorNotes", []):
-            beat = note.get("b", 0)
-            time = (beat / self.bpm) * 60  # Convert beat to seconds
-            x = note.get("x", 0)
-            y = note.get("y", 0)
-            color = "red" if note.get("c", 0) == 0 else "blue"
-            notes.append({"time": time, "x": x, "y": y, "color": color})
-        sorted_notes = sorted(notes, key=lambda n: n["time"])
-        print(f"Total de notas parseadas: {len(sorted_notes)}")
-        return sorted_notes
-    
-    def tocar(self):
-        """Inicia a reprodução da música."""
-        try:
-            print(f"Carregando música: {self.audio_path}")
-            pygame.mixer.music.load(self.audio_path)
-            pygame.mixer.music.play()
-            self.tempo_inicio = pygame.time.get_ticks() / 1000.0  # Tempo inicial em segundos
-            print(f"Música {self.audio_path} está tocando...")
-        except pygame.error as e:
-            print(f"Erro ao carregar a música: {e}")
-
 class Game:
     def __init__(self, music):
-        print("Inicializando a classe Game...")
         self.music = music
         self.running = True
-        self.screen = pygame.display.set_mode((800, 600))
+        self.screen_width, self.screen_height = 800, 600  # Define a largura e altura da tela
+        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
         pygame.display.set_caption("A Sinfonia das Máquinas")
         self.clock = pygame.time.Clock()
-        self.start_time = None  # Será definido quando a música começar a tocar
+        self.font = pygame.font.SysFont("Arial", 30)
+        self.key_map = {pygame.K_w: 0, pygame.K_a: 1, pygame.K_s: 2, pygame.K_d: 3}
+        self.col_width = self.screen_width // 4
+        self.finish_line_y = 500
+        self.hitbox_tolerance = 30
+        self.score = 0
         self.notes_on_screen = []
-        self.finish_line_y = 500  # Posição da linha de chegada no eixo Y
-    
+        self.bpm = self.music.bpm
+        self.song_time_offset = self.music.song_time_offset
+
     def spawn_notes(self):
-        # Use o tempo da música para calcular o tempo atual
         current_time = pygame.mixer.music.get_pos() / 1000.0  # Tempo da música em segundos
-        while self.music.notes and self.music.notes[0]["time"] <= current_time + 2:  # Spawn 2s antes
+        while self.music.notes and self.music.notes[0]["time"] <= current_time + 2:
             note = self.music.notes.pop(0)
-            note_instance = {"time": note["time"], "x": note["x"], "y": 0, "color": note["color"]}
+            note_instance = {
+                "time": note["time"],
+                "x": note["x"],
+                "y": -100,  # Começa fora da tela
+                "color": note["color"]
+            }
             self.notes_on_screen.append(note_instance)
-            print(f"Nota spawnada: {note_instance}")
-    
-    def update_notes(self):
-        for note in self.notes_on_screen:
-            note["y"] += 5  # Move down by 5 pixels por frame
-        
-        # Verificar se alguma nota alcançou ou passou a linha de chegada
-        for note in self.notes_on_screen[:]:  # Copia a lista para evitar modificar enquanto percorre
-            if note["y"] >= self.finish_line_y:
-                print(f"Nota atingiu a linha de chegada: {note}")
-                self.notes_on_screen.remove(note)  # Remova a nota ou implemente lógica adicional
-    
+
+    def update_notes(self, delta_time):
+        # Atualiza a posição de cada nota com base no tempo restante
+        current_time = pygame.mixer.music.get_pos() / 1000.0
+        for note in self.notes_on_screen[:]:
+            time_remaining = note["time"] - current_time
+
+            # Atualizar a posição Y da nota
+            note["y"] = self.finish_line_y - (300 * time_remaining)
+
+            # Verificar se a nota está fora da tela (muito abaixo)
+            if note["y"] > self.screen_height:
+                self.notes_on_screen.remove(note)
+
+    def check_hit(self, key_pressed):
+        # Verificar se o jogador pressionou a tecla correta no momento certo
+        current_time = pygame.mixer.music.get_pos() / 1000.0
+        for note in self.notes_on_screen[:]:
+            time_difference = abs(note["time"] - current_time)
+            if time_difference <= self.hitbox_tolerance:
+                # Verificar se a tecla corresponde à nota
+                if key_pressed == note["key"]:
+                    self.notes_on_screen.remove(note)  # Remove a nota se o hit foi bem-sucedido
+                    self.score += 10  # Incrementa a pontuação
+                    return True  # Retorna que o hit foi bem-sucedido
+        return False
+
+    def handle_key_press(self, key):
+        if key in self.key_map:
+            col = self.key_map[key]
+            for note in self.notes_on_screen[:]:
+                if (
+                    note["x"] == col
+                    and self.finish_line_y - self.hitbox_tolerance <= note["y"] <= self.finish_line_y + self.hitbox_tolerance
+                ):
+                    self.score += 1
+                    self.notes_on_screen.remove(note)
+
     def draw_notes(self):
-        # Desenhar linha de chegada
         pygame.draw.line(self.screen, (255, 255, 255), (0, self.finish_line_y), (800, self.finish_line_y), 2)
-        
-        # Desenhar notas
         for note in self.notes_on_screen:
             color = (255, 0, 0) if note["color"] == "red" else (0, 0, 255)
-            pos_x = note["x"] * 200 + 100  # Ajuste conforme necessário
+            pos_x = note["x"] * self.col_width + self.col_width // 2
             pygame.draw.circle(self.screen, color, (pos_x, int(note["y"])), 20)
-    
+
+    def draw_ui(self):
+        score_text = self.font.render(f"Score: {self.score}", True, (255, 255, 255))
+        self.screen.blit(score_text, (10, 10))
+
     def run(self):
-        print("Iniciando a reprodução da música...")
         self.music.tocar()
-        pygame.time.delay(500)
-        print("Iniciando o loop principal do jogo...")
         while self.running:
+            delta_time = self.clock.tick(60) / 1000.0
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     self.running = False
-            
-            # Atualizar jogo
+                elif event.type == pygame.KEYDOWN:
+                    self.handle_key_press(event.key)
+
             self.spawn_notes()
-            self.update_notes()
-            
-            # Desenhar na tela
-            self.screen.fill((0, 0, 0))  # Fundo preto
+            self.update_notes(delta_time)
+            self.screen.fill((0, 0, 0))
             self.draw_notes()
+            self.draw_ui()
             pygame.display.flip()
-            
-            self.clock.tick(60)
-        print("Loop principal encerrado.")
+
+class Music:
+    def __init__(self, info_file, notes_file, audio_file):
+        with open(info_file, "r") as f:
+            info = json.load(f)
+        self.bpm = info["_beatsPerMinute"]
+        self.song_time_offset = info["_songTimeOffset"]
+        self.audio_file = audio_file
+        with open(notes_file, "r") as f:
+            raw_notes = json.loads(f.read())
+        self.notes = [
+            {
+                "time": (note["b"] / self.bpm) * 60 + self.song_time_offset,
+                "x": note["x"],
+                "color": "red" if note["c"] == 0 else "blue"
+            }
+            for note in raw_notes["colorNotes"]
+        ]
+
+    def tocar(self):
+        pygame.mixer.music.load(self.audio_file)
+        pygame.mixer.music.play()
 
 if __name__ == "__main__":
     pygame.init()
-    # Defina o caminho correto para o arquivo de áudio convertido
-    audio_file = "miser.mp3"  # Ou "miser.mp3" se você converteu para MP3
-    # Verifique se o arquivo existe
-    if not os.path.exists(audio_file):
-        print(f"Arquivo de áudio não encontrado: {audio_file}")
-    else:
-        print(f"Arquivo de áudio encontrado: {audio_file}")
-        music = Music("Info.dat", "ExpertPlusStandard.dat", audio_file)
-        game = Game(music)
-        game.run()
+    music = Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
+    game = Game(music)
+    game.run()
     pygame.quit()
-    print("Pygame encerrado.")
