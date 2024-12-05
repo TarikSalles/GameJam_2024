@@ -51,7 +51,6 @@ class Piano:
 
         for i, y in enumerate(self.linhas):
     
-            #pygame.draw.line(screen, black, (y, 0), (y, self.height), 3)
             key_text = self.key_map[self.teclas[i]] 
             tecla_surface = font.render(key_text, True, black)
             screen.blit(tecla_surface, (y - tecla_surface.get_width() / 2, self.init_x + tecla_surface.get_height()))
@@ -99,8 +98,7 @@ class Piano:
                         print(f"{tecla} OK")
                         
                         # Lógica adicional ao acertar a tecla
-                        if self.tipo == "ataque":
-                            self.score += self.incremento_score
+                        self.score += self.incremento_score
                         
                         esfera.acertou = True
                         self.controlador.remover_esfera(esfera)  # Remova a esfera

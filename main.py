@@ -43,7 +43,7 @@ def main():
 
         for esfera in controlador_esferas_player_1.esferas:
                 esfera.mover() 
-                if esfera.update():
+                if (esfera.update()):
                     controlador_esferas_player_1.remover_esfera(esfera)
         
 
@@ -63,11 +63,10 @@ def main():
         beats_player1.update_notes()
         beats_player2.update_notes()
 
-        beats_player1.verificar_colisao()  # Verifique colisões para todas as teclas pressionadas
-
-        
-        beats_player2.verificar_colisao()  # Verifique colisões para todas as teclas pressionadas
-
+        beats_player1.verificar_colisao() 
+        beats_player2.verificar_colisao()
+        score_player1 = beats_player1.get_score_geral()
+        score_player2 = beats_player2.get_score_geral()
         beats_player1.desenhar(screen)
         beats_player2.desenhar(screen)
     
