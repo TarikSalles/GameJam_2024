@@ -175,6 +175,8 @@ def main():
         score_player2 = piano_player2.get_score_geral()
         
         # Determinação de Ataques Baseados na Pontuação
+        print("Scorre", score_player1, score_player2)
+        
         if score_player1 > score_player2:
             gerenciador_personagens.personagem2.atacar()
             ataque_personagem2 = True
@@ -186,7 +188,10 @@ def main():
             ataque_personagem1 = True
             if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
                 tempo_morte_p2 = pygame.time.get_ticks()
+        
+        # if 
         gerenciador_personagens.atualizar_personagens(delta_tempo)
+        
         # Aplicação de Dano Após o Ataque Completar
         if ataque_personagem1 and not gerenciador_personagens.personagem1.em_ataque:
             gerenciador_personagens.personagem2.levar_dano(1)  # Aplica dano ao personagem2

@@ -107,6 +107,8 @@ class Piano:
                         esfera.acertou = True
                         esfera.bola_acerto()
                         #self.controlador.remover_esfera(esfera)  # Remova a esfera
+                    else:
+                        self.score -= self.incremento_score
 
     def get_score_geral(self):
         return self.score
