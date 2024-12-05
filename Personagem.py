@@ -1,7 +1,7 @@
 import pygame
 import random
-from Vida import Vida
-from Especial import Especial
+from vida import Vida
+from especial import Especial
 
 class Personagem:
     def __init__(self, posicao_personagem, tamanho_personagem, max_vida, max_especial,
@@ -18,6 +18,59 @@ class Personagem:
         caminho_attack1 = caminho_base + "_attack1.png"  # Corrigido o nome
         caminho_attack2 = caminho_base + "_attack2.png"  # Corrigido o nome
         caminho_attack3 = caminho_base + "_attack3.png"  # Corrigido o nome
+
+        # Carrega as spritesheets
+        try:
+            self.spritesheet_idle = pygame.image.load(caminho_idle).convert_alpha()
+            self.spritesheet_dano = pygame.image.load(caminho_dano).convert_alpha()
+            self.spritesheet_attack1 = pygame.image.load(caminho_attack1).convert_alpha()
+            self.spritesheet_attack2 = pygame.image.load(caminho_attack2).convert_alpha()
+            self.spritesheet_attack3 = pygame.image.load(caminho_attack3).convert_alpha()
+        except pygame.error as e:
+            print(f"Erro ao carregar spritesheets: {e}")
+            raise SystemExit(e)
+
+        # Carrega as animações
+        self.animacoes = {
+            "idle": self.carregar_frames(self.spritesheet_idle, num_cols_idle),
+            "hurt": self.carregar_frames(self.spritesheet_dano, num_cols_dano),
+            "attack1": self.carregar_frames(self.spritesheet_attack1, num_cols_attack1),
+            "attack2": self.carregar_frames(self.spritesheet_attack2, num_cols_attack2_3),
+            "attack3": self.carregar_frames(self.spritesheet_attack3, num_cols_attack2_3),
+        }
+
+        # Define a animação atual
+        self.animacao_atual = "idle"
+        self.frames = self.animacoes[self.animacao_atual]
+        self.frame_atual = 0
+        self.contador_tempo = 0
+        self.velocidade_animacao = 0.1  # Velocidade da animação (em segundos)
+
+        # Flags de controle
+        self.sofreu_dano = False
+        self.em_ataque = False  # Flag para indicar se o personagem está atacando
+
+        # Calcula o tamanho das barras de vida e especial proporcional ao tamanho do personagem
+        largura_barra = self.tamanho_desejada[0]
+        altura_barra = self.tamanho_desejada[1] * 0.1  # 10% da altura do personagem
+
+        # Calcula a posição das barras abaixo do personagem
+        posicao_vida = (self.posicao[0], self.posicao[1] + self.tamanho_desejada[1] + 5)
+        posicao_especial = (self.posicao[0], self.posicao[1] + self.tamanho_desejada[1] + altura_barra + 10)
+
+        # Inicializa vida e especial com as posições e tamanhos calculados
+        self.vida = Vida(
+            max_vida=max_vida,
+            posicao=posicao_vida,
+            tamanho_sprite=(largura_barra, altura_barra),
+            pasta_sprites=pasta_sprites_vida
+        )
+        self.especial = Especial(
+            max_especial=max_especial,
+            posicao=posicao_especial,
+            tamanho_sprite=(largura_barra, altura_barra),
+            pasta_sprites=pasta_sprites_especial
+        )
 
         # Carrega as spritesheets
         try:
