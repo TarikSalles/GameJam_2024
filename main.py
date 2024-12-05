@@ -2,7 +2,8 @@ import pygame
 from piano import Piano
 from bola import ControladorEsferas
 import random
-# Função principal
+from music import Music
+
 def main():
     screen_width = 800
     screen_height = 600
@@ -10,23 +11,19 @@ def main():
     tamanho_linha_height = 100
     Score_Geral = 0
 
-    # Inicializa o controlador de esferas
     controlador = ControladorEsferas()
 
-    # Cria uma instância do piano com os tamanhos desejados
-    incremento_score = 5
+    music =  Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
     piano = Piano(controlador, width=screen_width, height=screen_height / 2, 
                   
-                  tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = Score_Geral, tipo = "ataque",incremento_score=incremento_score)
+                  tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = Score_Geral, tipo = "ataque",music=music)
 
-    # Configura a tela
+    piano.run_music()
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("Piano Interativo")
 
-    # Criação de uma esfera para testar a funcionalidade
     
 
-    # Loop principal
     running = True
     clock = pygame.time.Clock()
 
@@ -35,25 +32,26 @@ def main():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.KEYDOWN:
-                piano.verificar_colisao(event.key)
-                if (event.key == pygame.K_LSHIFT):
-                    print("Score Geral: ",piano.get_score_geral())
+                if event.key == pygame.K_LSHIFT:
+                    print("Score Geral: ", piano.get_score_geral())
                     letra_aleatoria = ["W", "A", "S", "D"]
-                    piano.criar_esfera(random.choice(letra_aleatoria))  
+                    piano.criar_esfera(random.choice(letra_aleatoria))
+
+        keys_pressed = pygame.key.get_pressed()
+        piano.verificar_colisao(keys_pressed)
             
 
-        # Atualiza as esferas
 
         for esfera in controlador.esferas:
-            esfera.mover(0, 2)  # Move as esferas para baixo
+            esfera.mover() 
             if esfera.update():
                 controlador.remover_esfera(esfera)
-                Score_Geral -= incremento_score
             
 
 
         
         piano.desenhar(screen)
+        piano.piano_loop_principal()
         pygame.display.flip()
         clock.tick(60)
 
