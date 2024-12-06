@@ -37,6 +37,7 @@ class Bola(pygame.sprite.Sprite):
         self.y = y
         self.acerto = False
         
+        
     def update(self):
         # Verifica se a esfera ultrapassou o limite superior ou inferior da caixa de colisão
         if self.rect.top + self.height_ball < 0:
@@ -44,7 +45,7 @@ class Bola(pygame.sprite.Sprite):
             return True
         if self.rect.top < self.y_hitbox and self.acerto == False:
             if(self.tecla == 1 and self.player == 1):
-                image_path="assets/a_acerto.png"
+                image_path="assets/a_clicado.png"
             elif(self.tecla == 2 and self.player == 1):
                     image_path="assets/s_clicado.png"
             elif(self.tecla == 3 and self.player == 1):
@@ -59,6 +60,7 @@ class Bola(pygame.sprite.Sprite):
                     image_path="assets/esq_clicado.png"
             elif(self.tecla == 3 and self.player == 2):
                     image_path="assets/dir_clicado.png"
+            return True
             
         return False 
     def mover(self):

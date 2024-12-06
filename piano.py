@@ -40,6 +40,8 @@ class Piano:
         self.teclas = teclas
         self.tamanho_hitbox = 20
         self.min = 0
+        self.teclas_processadas = {tecla: False for tecla in self.teclas}  # Inicializa como não processadas
+
         self.ball_speed = -2
         self.y_hitbox = self.init_y + self.init_y + self.tamanho_hitbox * 3
         self.hitboxes = [
@@ -113,6 +115,36 @@ class Piano:
     def get_score_geral(self):
         return self.score
 
+    def verificar_colisao(self):
+        """Verifica colisões de todas as esferas com as hitboxes para teclas pressionadas simultaneamente"""
+        keys_pressed = pygame.key.get_pressed()
+        
+        for i, hitbox in enumerate(self.hitboxes):  # Para cada hitbox
+            tecla = self.teclas[i]  # Tecla associada à hitbox
+            
+            # Obtem o código da tecla diretamente do mapa
+            tecla_code = tecla  # `teclas` já deve conter os códigos (como pygame.K_w)
+            
+            if keys_pressed[tecla_code]:  # Se a tecla está pressionada
+                if not self.teclas_processadas[tecla]:  # Só processa se ainda não foi tratada
+                    for esfera in self.controlador.esferas[:]:  # Verifique todas as esferas
+                        if hitbox.colliderect(esfera.rect):  # Colisão com a hitbox
+                            print(f"{self.key_map[tecla]} OK")  # Exibe a tecla correta
+                            
+                            # Lógica adicional ao acertar a tecla
+                            self.score += self.incremento_score
+                            
+                            esfera.acertou = True
+                            esfera.bola_acerto()
+                            # self.controlador.remover_esfera(esfera)  # Remova a esfera
+                        else:
+                            self.score -= self.incremento_score
+                    
+                    # Marca a tecla como processada
+                    self.teclas_processadas[tecla] = True
+            else:
+                # Quando a tecla não está mais pressionada, redefine o estado
+                self.teclas_processadas[tecla] = False
     def spawn_notes(self):
         # Use o tempo da música para calcular o tempo atual
         current_time = pygame.mixer.music.get_pos() / 1000.0  # Tempo da música em segundos

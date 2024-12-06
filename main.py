@@ -9,10 +9,12 @@ from fim import exibir_tela_fim_jogo
 
 # Inicialização do Pygame
 pygame.init()
-
+info = pygame.display.Info()
+screen_width,screen_height = info.current_w,info.current_h
 # Definir a resolução mínima e inicial da tela
 LARGURA_MINIMA, ALTURA_MINIMA = 1280, 720  # Resolução mínima
-LARGURA_INICIAL, ALTURA_INICIAL = 1920, 1080  # Resolução inicial
+
+LARGURA_INICIAL, ALTURA_INICIAL = screen_width,screen_height  # Resolução inicial
 TELA = pygame.display.set_mode((LARGURA_INICIAL, ALTURA_INICIAL), pygame.RESIZABLE)
 pygame.display.set_caption("Jogo com Vida e Especial")
 
@@ -224,7 +226,7 @@ def main():
         for esfera in controlador_esferas_player_2.esferas:
                 esfera.mover() 
                 if esfera.update():
-                    if(esfera.acerto == False):
+                    if esfera.acerto == False:
                          piano_player2.score -= incremento_score
                     controlador_esferas_player_2.remover_esfera(esfera)
         
