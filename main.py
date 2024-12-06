@@ -111,7 +111,7 @@ def main():
     tamanho_linha_height = 100
 
     piano_player1 = Piano(controlador_esferas_player_1, incremento_score= incremento_score,width=LARGURA_INICIAL / 2, height=ALTURA_INICIAL / 2, tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = score_player1, tipo = "ataque",music=music_player1,teclas = [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d])
-    piano_player2 = Piano(controlador_esferas_player_2, incremento_score= incremento_score,width=LARGURA_INICIAL / 2, height=ALTURA_INICIAL / 2, tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = score_player2, tipo = "ataque",music=music_player2,init_x= LARGURA_INICIAL / 1.55, init_y=0,teclas = [pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT],player=2)
+    piano_player2 = Piano(controlador_esferas_player_2, incremento_score= incremento_score,width=LARGURA_INICIAL / 2, height=ALTURA_INICIAL / 2, tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = score_player2, tipo = "ataque",music=music_player2,init_x= LARGURA_INICIAL - 500, init_y=0,teclas = [pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT],player=2)
 
     
     # Variáveis de Controle
