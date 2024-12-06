@@ -1,6 +1,4 @@
 import pygame
-import sys
-import random
 from piano import Piano
 from bola import ControladorEsferas
 from music import Music
@@ -10,11 +8,11 @@ from fim import exibir_tela_fim_jogo
 # Inicialização do Pygame
 pygame.init()
 info = pygame.display.Info()
-screen_width,screen_height = info.current_w,info.current_h
+screen_width, screen_height = info.current_w, info.current_h
+
 # Definir a resolução mínima e inicial da tela
 LARGURA_MINIMA, ALTURA_MINIMA = 1280, 720  # Resolução mínima
-
-LARGURA_INICIAL, ALTURA_INICIAL = screen_width,screen_height  # Resolução inicial
+LARGURA_INICIAL, ALTURA_INICIAL = screen_width, screen_height  # Resolução inicial
 TELA = pygame.display.set_mode((LARGURA_INICIAL, ALTURA_INICIAL), pygame.RESIZABLE)
 pygame.display.set_caption("Musical Fight")
 
@@ -27,9 +25,16 @@ RELOGIO = pygame.time.Clock()
 FPS = 60
 
 # Fonte para textos
-FONTE = pygame.font.Font(None, 50)
+FONTE = pygame.font.Font(None, 50)  # Fonte padrão com tamanho 50
 
-# Carregar o fundo
+# Carregar a fonte tecnológica
+try:
+    fonte_tecnologica = pygame.font.Font("./sprites/fonts/tech_font.otf", 64)  # Carrega a fonte tecnológica
+except FileNotFoundError:
+    print("Fonte .otf não encontrada. Usando fonte padrão.")
+    fonte_tecnologica = pygame.font.Font(None, 64)
+
+# Carregar o fundo e elementos
 background = pygame.image.load("./sprites/tela/background.png").convert()
 quadro_imagem = pygame.image.load("./sprites/tela/quadro.png").convert_alpha()
 vida_imagem = pygame.image.load("./sprites/tela/vida.png").convert_alpha()
@@ -63,6 +68,17 @@ def redimensionar_personagens(personagens, tela_largura, tela_altura):
             p.posicao[1]   # Mantém a posição y original
         )
 
+# Função para desenhar o round
+def desenhar_round(tela, round_atual, fonte, cor, posicao_base, quadro_tamanho):
+    texto = f"Round {round_atual}"
+    texto_renderizado = fonte.render(texto, True, cor)
+    largura_texto, altura_texto = texto_renderizado.get_size()
+    posicao_final = (
+        posicao_base[0] + (quadro_tamanho[0] // 2) - (largura_texto // 2),
+        posicao_base[1] + 20  # 20 pixels abaixo do topo do quadro
+    )
+    tela.blit(texto_renderizado, posicao_final)
+
 # Classe Gerenciador de Personagens para facilitar a gestão de múltiplos personagens
 class GerenciadorPersonagens:
     def __init__(self, tela_largura):
@@ -75,7 +91,7 @@ class GerenciadorPersonagens:
             invert_frames=False
         )
         self.personagem2 = Personagem(
-            posicao_personagem=(tela_largura // 2-40, 300),
+            posicao_personagem=(tela_largura // 2 - 40, 300),
             tamanho_personagem=(300, 450),
             caminho_sprites="./sprites/personagem/Jogador_2/",
             nome_personagem="Punk",
@@ -96,12 +112,6 @@ def main():
     # Inicialização da Música
     music_player1 = Music("musica_easy/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
     music_player2 = Music("musica_hard/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
-    
-    music_player1 = Music("musica_easy/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
-    music_player2 = Music("musica_easy/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
-    
-    # music_player1 = Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
-    # music_player2 = Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
     
     # Iniciar a música
     music_player1.tocar()
@@ -125,9 +135,34 @@ def main():
     tamanho_linha_width = 700
     tamanho_linha_height = 100
 
-    piano_player1 = Piano(controlador_esferas_player_1, incremento_score= incremento_score,width=LARGURA_INICIAL / 2, height=ALTURA_INICIAL / 2, tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = score_player1, tipo = "ataque",music=music_player1,teclas = [pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d])
-    piano_player2 = Piano(controlador_esferas_player_2, incremento_score= incremento_score,width=LARGURA_INICIAL / 2, height=ALTURA_INICIAL / 2, tamanho_linha_width=tamanho_linha_width, tamanho_linha_height=tamanho_linha_height, score = score_player2, tipo = "ataque",music=music_player2,init_x= LARGURA_INICIAL - 500, init_y=0,teclas = [pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT],player=2)
-
+    piano_player1 = Piano(
+        controlador_esferas_player_1,
+        incremento_score=incremento_score,
+        width=LARGURA_INICIAL / 2,
+        height=ALTURA_INICIAL / 2,
+        tamanho_linha_width=tamanho_linha_width,
+        tamanho_linha_height=tamanho_linha_height,
+        score=score_player1,
+        tipo="ataque",
+        music=music_player1,
+        teclas=[pygame.K_w, pygame.K_a, pygame.K_s, pygame.K_d]
+    )
+    
+    piano_player2 = Piano(
+        controlador_esferas_player_2,
+        incremento_score=incremento_score,
+        width=LARGURA_INICIAL / 2,
+        height=ALTURA_INICIAL / 2,
+        tamanho_linha_width=tamanho_linha_width,
+        tamanho_linha_height=tamanho_linha_height,
+        score=score_player2,
+        tipo="ataque",
+        music=music_player2,
+        init_x=LARGURA_INICIAL - 500,
+        init_y=0,
+        teclas=[pygame.K_UP, pygame.K_LEFT, pygame.K_DOWN, pygame.K_RIGHT],
+        player=2
+    )
     
     # Variáveis de Controle
     score_player1 = 0
@@ -140,7 +175,7 @@ def main():
     tempo_espera_round = 2000
     tempo_rodando = pygame.time.get_ticks()
     rodando = True
-    round = 1
+    round_atual = 1  # Variável para controlar o round
     
     while rodando:
         delta_tempo = RELOGIO.tick(FPS) / 1000.0  # Delta de tempo em segundos
@@ -172,14 +207,6 @@ def main():
         piano_player1.verificar_colisao()
         piano_player2.verificar_colisao()
 
-        # Atualização Pontuação
-        # score_player1 = piano_player1.score
-        # score_player2 = piano_player2.score
-        
-        # Determinação de Ataques Baseados na Pontuação
-        
-        # gerenciador_personagens.atualizar_personagens(delta_tempo)
-
         # Redimensiona os personagens com base no tamanho da tela
         tela_largura, tela_altura = TELA.get_size()
         tela_largura = max(tela_largura, LARGURA_MINIMA)  # Garantir a largura mínima
@@ -190,85 +217,98 @@ def main():
         # Desenho na tela
         TELA.blit(fundo_redimensionado, (0, 0))  # Desenha o fundo
         
-        largura_quadro = 1400//2.5          # Defina a largura
-        altura_quadro = 2000//2.5           # Defina a altura
+        largura_quadro = 1400 // 2.5          # Defina a largura
+        altura_quadro = 2000 // 2.5           # Defina a altura
 
         quadro_redimensionado = redimensionar_quadro(largura_quadro, altura_quadro)
-        TELA.blit(quadro_redimensionado, (tela_largura//2-250, tela_altura//2-400)) 
+        posicao_quadro_x = tela_largura // 2 - 250
+        posicao_quadro_y = tela_altura // 2 - 400
+        TELA.blit(quadro_redimensionado, (posicao_quadro_x, posicao_quadro_y)) 
         
-        largura_vida = 430/2
-        altura_vida = 180/2
+        largura_vida = 430 / 2
+        altura_vida = 180 / 2
         
-        vida_redimensionada = redimensionar_vida((largura_vida, altura_vida))
-        TELA.blit(vida_redimensionada, (tela_largura//2 - 80, tela_altura//2 - 350))
+        vida_redimensionada = redimensionar_vida((int(largura_vida), int(altura_vida)))
+        TELA.blit(vida_redimensionada, (tela_largura // 2 - 80, tela_altura // 2 - 350))
 
-        largura_energia = 730/2
-        altura_energia = 180/2
+        largura_energia = 730 / 2
+        altura_energia = 180 / 2
         
-        energia_redimensionada = redimensionar_energia((largura_energia, altura_energia))
-        TELA.blit(energia_redimensionada, (tela_largura//2 - 150, tela_altura - 400 ))
+        energia_redimensionada = redimensionar_energia((int(largura_energia), int(altura_energia)))
+        TELA.blit(energia_redimensionada, (tela_largura // 2 - 150, tela_altura - 400 ))
         
+        # Desenhar o Round por cima do quadro usando fonte normal
+        desenhar_round(
+            tela=TELA,
+            round_atual=round_atual,
+            fonte=FONTE,           # Usando a fonte normal
+            cor=BRANCO,
+            posicao_base=(posicao_quadro_x, posicao_quadro_y),
+            quadro_tamanho=(largura_quadro, altura_quadro)
+        )
+        
+        # Atualização e desenho das esferas
         for esfera in controlador_esferas_player_1.esferas:
-                esfera.mover() 
-                if (esfera.update()):
-                    if(esfera.acerto == False):
-                         print(f"Player 1 Perdeu por conta de {esfera.id_unico}")
-                         piano_player1.score -= incremento_score
-                    controlador_esferas_player_1.remover_esfera(esfera)
-        
+            esfera.mover() 
+            if esfera.update():
+                if not esfera.acerto:
+                    print(f"Player 1 Perdeu por conta de {esfera.id_unico}")
+                    piano_player1.score -= incremento_score
+                controlador_esferas_player_1.remover_esfera(esfera)
 
-      
         for esfera in controlador_esferas_player_2.esferas:
-                esfera.mover() 
-                if esfera.update():
-                    if esfera.acerto == False:
-                         piano_player2.score -= incremento_score
-                    controlador_esferas_player_2.remover_esfera(esfera)
+            esfera.mover() 
+            if esfera.update():
+                if not esfera.acerto:
+                    piano_player2.score -= incremento_score
+                controlador_esferas_player_2.remover_esfera(esfera)
         
         score_player1 = piano_player1.score
         score_player2 = piano_player2.score
         
+        # Controle de Incremento do Round
         if pygame.time.get_ticks() - tempo_rodando > tempo_espera_round and not gerenciador_personagens.personagem1.morto and not gerenciador_personagens.personagem2.morto:
             tempo_rodando = pygame.time.get_ticks()
             print(f"Score Player 1: {score_player1},   Score Player 2: {score_player2}")
-            round += 1
+            round_atual += 1
             if score_player1 > score_player2:
-                    gerenciador_personagens.personagem1.atacar()
-                    gerenciador_personagens.personagem2.levar_dano(1)
-                    ataque_personagem2 = True
-                    if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
-                        gerenciador_personagens.personagem1.correr()
-                        tempo_morte_p2 = pygame.time.get_ticks()
+                gerenciador_personagens.personagem1.atacar()
+                gerenciador_personagens.personagem2.levar_dano(1)
+                ataque_personagem2 = True
+                if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
+                    gerenciador_personagens.personagem1.correr()
+                    tempo_morte_p2 = pygame.time.get_ticks()
 
             if score_player2 > score_player1:
-                    gerenciador_personagens.personagem2.atacar()
-                    gerenciador_personagens.personagem1.levar_dano(1)
-                    ataque_personagem1 = True
-                    if gerenciador_personagens.personagem1.vida.vida_atual == 0 and tempo_morte_p1 is None:
-                        gerenciador_personagens.personagem2.correr()
-                        tempo_morte_p1 = pygame.time.get_ticks()
-            
+                gerenciador_personagens.personagem2.atacar()
+                gerenciador_personagens.personagem1.levar_dano(1)
+                ataque_personagem1 = True
+                if gerenciador_personagens.personagem1.vida.vida_atual == 0 and tempo_morte_p1 is None:
+                    # Adicione lógica adequada aqui
+                    pass
+
             if score_player1 == 0 and score_player2 == 0:
                 if ganhouUltimoRound_player1:
-                    if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
-                        tempo_morte_p2 = pygame.time.get_ticks()
+                    # Adicione lógica adequada aqui
+                    pass
                 else:
-                    if gerenciador_personagens.personagem1.vida.vida_atual == 0 and tempo_morte_p1 is None:
-                        tempo_morte_p1 = pygame.time.get_ticks()
-            
+                    # Adicione lógica adequada aqui
+                    pass
+
             ganhouUltimoRound_player1 = score_player1 > score_player2
-            
+
             piano_player1.score = 0
             piano_player2.score = 0
-            score_player1=0
-            score_player2=0
-        
+            score_player1 = 0
+            score_player2 = 0
+
+        # Atualização e desenho dos personagens
         gerenciador_personagens.atualizar_personagens(delta_tempo)
-        
         gerenciador_personagens.desenhar_personagens(TELA)
         piano_player1.desenhar(TELA)
         piano_player2.desenhar(TELA)
         
+        # Atualizar a display
         pygame.display.flip()
         
         # Verificação de "Game Over" para Personagem 1
@@ -284,6 +324,14 @@ def main():
                 vencedor = '1'
                 exibir_tela_fim_jogo(TELA, vencedor)
                 rodando = False
+
+        # Controle de Incremento do Round por Tempo
+        tempoAtual += delta_tempo
+        if tempoAtual >= tempoDuracao:
+            round_atual += 1
+            tempoAtual = 0.0
+            print(f"Round {round_atual} iniciado!")
+            # Resetar ou ajustar outras variáveis conforme necessário
 
     pygame.quit()
 
