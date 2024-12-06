@@ -16,7 +16,7 @@ LARGURA_MINIMA, ALTURA_MINIMA = 1280, 720  # Resolução mínima
 
 LARGURA_INICIAL, ALTURA_INICIAL = screen_width,screen_height  # Resolução inicial
 TELA = pygame.display.set_mode((LARGURA_INICIAL, ALTURA_INICIAL), pygame.RESIZABLE)
-pygame.display.set_caption("Jogo com Vida e Especial")
+pygame.display.set_caption("Musical Fight")
 
 # Cores
 PRETO = (0, 0, 0)
@@ -99,6 +99,7 @@ def main():
     # Inicialização dos Componentes do Piano
     score_player1 = 10
     score_player2 = 10
+    ganhouUltimoRound_player1 = False
     tempoAtual = 0.0
     tempoDuracao = 15.0
     turnoPlayer1 = True
@@ -184,6 +185,7 @@ def main():
             print(f"Score Player 1: {score_player1}, Score Player 2: {score_player2}")
             piano_player1.score = 0
             piano_player2.score = 0
+            ganhouUltimoRound_player1 = score_player1 > score_player2
             score_player1=0
             score_player2=0
         
@@ -198,10 +200,19 @@ def main():
         if score_player2 > score_player1:
             if cont % 199 == 0:
                 gerenciador_personagens.personagem1.atacar()
-                gerenciador_personagens.personagem2.levar_dano(1)
+                gerenciador_personagens.personagem1.levar_dano(1)
                 ataque_personagem1 = True
                 if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
                     tempo_morte_p2 = pygame.time.get_ticks()
+        if score_player1 == 0 and score_player2 == 0:
+            if ganhouUltimoRound_player1:
+                if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
+                    tempo_morte_p2 = pygame.time.get_ticks()
+            else:
+                if gerenciador_personagens.personagem1.vida.vida_atual == 0 and tempo_morte_p1 is None:
+                    tempo_morte_p1 = pygame.time.get_ticks()
+
+            
         
         gerenciador_personagens.atualizar_personagens(delta_tempo)
 
