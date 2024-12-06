@@ -60,27 +60,27 @@ class Piano:
     
             key_text = self.key_map[self.teclas[i]] 
             tecla_surface = font.render(key_text, True, black)
-            screen.blit(tecla_surface, (y - tecla_surface.get_width() / 2, self.init_x + tecla_surface.get_height()))
+            #screen.blit(tecla_surface, (y - tecla_surface.get_width() / 2, self.init_x + tecla_surface.get_height()))
             if(key_text.lower() == "a" or key_text.lower() == "s" or key_text.lower() == "d" or key_text.lower() == "w"):
                 img_placeholder = pygame.image.load(f"assets/{key_text.lower()}_normal.png")
                 img_placeholder = pygame.transform.scale(img_placeholder, (self.width_teclas, self.width_teclas))
-                screen.blit(img_placeholder, (self.hitboxes[i].x - self.tamanho_hitbox,self.hitboxes[i].y))
+                screen.blit(img_placeholder, (self.linhas[i] - self.width_teclas // 2,self.hitboxes[i].y))
             if(key_text.lower() == "↑"):
                 img_placeholder = pygame.image.load(f"assets/cima_normal.png")
                 img_placeholder = pygame.transform.scale(img_placeholder, (self.width_setas, self.width_setas))
-                screen.blit(img_placeholder, (self.hitboxes[i].x - self.tamanho_hitbox //3,self.hitboxes[i].y))
+                screen.blit(img_placeholder, (self.linhas[i] - self.width_setas // 2,self.hitboxes[i].y))
             if(key_text.lower() == "↓"):
                 img_placeholder = pygame.image.load(f"assets/baixo_normal.png")
                 img_placeholder = pygame.transform.scale(img_placeholder, (self.width_setas, self.width_setas))
-                screen.blit(img_placeholder, (self.hitboxes[i].x - self.tamanho_hitbox // 3,self.hitboxes[i].y))
+                screen.blit(img_placeholder, (self.linhas[i]- self.width_setas // 2,self.hitboxes[i].y))
             if(key_text.lower() == "←"):
                 img_placeholder = pygame.image.load(f"assets/esq_normal.png")
                 img_placeholder = pygame.transform.scale(img_placeholder, (self.width_setas, self.width_setas))
-                screen.blit(img_placeholder, (self.hitboxes[i].x - self.tamanho_hitbox // 3,self.hitboxes[i].y))
+                screen.blit(img_placeholder, (self.linhas[i]- self.width_setas // 2,self.hitboxes[i].y))
             if(key_text.lower() == "→"):
                 img_placeholder = pygame.image.load(f"assets/dir_normal.png")
                 img_placeholder = pygame.transform.scale(img_placeholder, (self.width_setas, self.width_setas))
-                screen.blit(img_placeholder, (self.hitboxes[i].x - self.tamanho_hitbox // 3,self.hitboxes[i].y))
+                screen.blit(img_placeholder, (self.linhas[i]- self.width_setas // 2,self.hitboxes[i].y))
         # Desenhar hitboxes
         for hitbox in self.hitboxes:
             #pygame.draw.rect(screen, green, hitbox)
