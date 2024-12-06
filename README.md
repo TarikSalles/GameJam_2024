@@ -4,6 +4,9 @@ O build já foi feito e o executável está pronto para uso na pasta principal.
 
 ## Gerar o Build e Executável
 
+É necessário instalar a biblioteca:
+  pip install pyinstaller
+
 Para gerar o build e gerar o executável, execute o seguinte comando:
 
 ```bash
