@@ -218,6 +218,7 @@ def main():
                 esfera.mover() 
                 if (esfera.update()):
                     if(esfera.acerto == False):
+                         print(f"Player 1 Perdeu por conta de {esfera.id_unico}")
                          piano_player1.score -= incremento_score
                     controlador_esferas_player_1.remover_esfera(esfera)
         

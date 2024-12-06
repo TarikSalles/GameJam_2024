@@ -16,6 +16,7 @@ class Piano:
         self.init_x = init_x
         self.player = player
         self.init_y = init_y
+        self.id_bola = 0
         self.width = width
         self.key_map = {
     pygame.K_w: 'W',
@@ -89,35 +90,18 @@ class Piano:
         y = self.height
         width = 50
         height = 50
-        esfera = Bola(x, y, width, height,self.height,self.y_hitbox,velocidade_bola=self.ball_speed, tecla = self.teclas.index(letra), player=  self.player)
+        esfera = Bola(self.id_bola,x, y, width, height,self.height,self.y_hitbox,velocidade_bola=self.ball_speed, tecla = self.teclas.index(letra), player=  self.player)
+        self.id_bola += 1
         self.controlador.esferas.append(esfera)
         return esfera
-    def verificar_colisao(self):
-        """Verifica colisões de todas as esferas com as hitboxes para teclas pressionadas simultaneamente"""
-        keys_pressed = pygame.key.get_pressed()
-        
-        for i, hitbox in enumerate(self.hitboxes):  # Para cada hitbox
-            tecla = self.teclas[i]  # Tecla associada à hitbox
-            if keys_pressed[tecla]:  # Se a tecla está pressionada
-                for esfera in self.controlador.esferas[:]:  # Verifique todas as esferas
-                    if hitbox.colliderect(esfera.rect):  # Colisão com a hitbox
-                        print(f"{tecla} OK")
-                        
-                        # Lógica adicional ao acertar a tecla
-                        self.score += self.incremento_score
-                        
-                        esfera.acertou = True
-                        esfera.bola_acerto()
-                        #self.controlador.remover_esfera(esfera)  # Remova a esfera
-                    else:
-                        self.score -= self.incremento_score
-
+    
     def get_score_geral(self):
         return self.score
 
     def verificar_colisao(self):
         """Verifica colisões de todas as esferas com as hitboxes para teclas pressionadas simultaneamente"""
         keys_pressed = pygame.key.get_pressed()
+        acertouAlguma = False
         
         for i, hitbox in enumerate(self.hitboxes):  # Para cada hitbox
             tecla = self.teclas[i]  # Tecla associada à hitbox
@@ -136,15 +120,17 @@ class Piano:
                             
                             esfera.acertou = True
                             esfera.bola_acerto()
+                            acertouAlguma = True
                             # self.controlador.remover_esfera(esfera)  # Remova a esfera
-                        else:
-                            self.score -= self.incremento_score
+                       
                     
                     # Marca a tecla como processada
                     self.teclas_processadas[tecla] = True
             else:
                 # Quando a tecla não está mais pressionada, redefine o estado
                 self.teclas_processadas[tecla] = False
+        if acertouAlguma:
+                        self.score -= self.incremento_score
     def spawn_notes(self):
         # Use o tempo da música para calcular o tempo atual
         current_time = pygame.mixer.music.get_pos() / 1000.0  # Tempo da música em segundos

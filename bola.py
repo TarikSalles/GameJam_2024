@@ -1,7 +1,7 @@
 import pygame
 
 class Bola(pygame.sprite.Sprite):
-    def __init__(self, x, y, width, height, final_height, y_hitbox, velocidade_bola, image_path="Sprites/sphere.png", tecla = 1, player = 1):
+    def __init__(self, id,x, y, width, height, final_height, y_hitbox, velocidade_bola, image_path="Sprites/sphere.png", tecla = 1, player = 1):
         self.tecla = tecla
         self.player = player
         self.y_hitbox = y_hitbox
@@ -36,7 +36,7 @@ class Bola(pygame.sprite.Sprite):
         self.x = x
         self.y = y
         self.acerto = False
-        
+        self.id_unico = id
         
     def update(self):
         # Verifica se a esfera ultrapassou o limite superior ou inferior da caixa de colisão
