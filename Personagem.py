@@ -11,6 +11,8 @@ class Personagem:
         self.posicao = posicao_personagem  # Posição do personagem (x, y)
         self.tamanho_desejada = tamanho_personagem  # Tamanho desejado (largura, altura)
         self.invert_frames = invert_frames
+        self.morto = False
+        self.cont_pulos = 0
 
         # Caminhos para as animações
         caminho_base = caminho_sprites + nome_personagem + "/" + nome_personagem
@@ -61,7 +63,7 @@ class Personagem:
         self.frames = self.animacoes[self.animacao_atual]
         self.frame_atual = 0
         self.contador_tempo = 0
-        self.velocidade_animacao = 0.1  # Velocidade da animação (em segundos)
+        self.velocidade_animacao = 0.2  # Velocidade da animação (em segundos)
 
         # Flags de controle
         self.sofreu_dano = False
@@ -144,8 +146,8 @@ class Personagem:
             self.frame_atual += 1
 
             # Verifica se a animação terminou
-            if self.frame_atual >= len(self.frames):
-                if self.animacao_atual in ["hurt", "attack1", "attack2", "attack3"]:
+            if self.frame_atual >= len(self.frames) and not self.morto:
+                if self.animacao_atual in ["hurt", "attack1", "attack2", "attack3", "pulo"]:
                     # Retorna para a animação idle
                     self.animacao_atual = "idle"
                     self.frames = self.animacoes[self.animacao_atual]
@@ -153,6 +155,13 @@ class Personagem:
                 if self.animacao_atual in ["morte"]:
                     self.morto = True
                     self.frame_atual = len(self.frames) - 1
+                
+                
+                
+                if self.animacao_atual in ["corrida"]:
+                    self.animacao_atual = "pulo"
+                    self.frames = self.animacoes[self.animacao_atual]
+                    self.frame_atual = 0
                     
                 else:
                     self.frame_atual = 0
@@ -162,6 +171,9 @@ class Personagem:
 
     def desenhar(self, tela):
         # Desenha o frame atual do personagem na tela
+        if self.morto and self.frame_atual >= len(self.frames):
+            self.frame_atual = len(self.frames) - 1
+            
         tela.blit(self.frames[self.frame_atual], self.posicao)
 
         # Desenha as barras de vida e especial
@@ -176,7 +188,13 @@ class Personagem:
             self.frame_atual = 0
         else:
             self.animacao_atual = "morte"
+            self.morto = True
             self.frames = self.animacoes[self.animacao_atual]
             self.frame_atual = 0
+            
+    def correr(self):
+        self.animacao_atual = "corrida"
+        self.frames = self.animacoes[self.animacao_atual]
+        self.frame_atual = 0
 
     

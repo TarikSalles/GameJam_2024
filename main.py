@@ -82,8 +82,11 @@ class GerenciadorPersonagens:
 def main():
     # Inicialização das Classes
     # Inicialização da Música
-    music_player1 = Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
-    music_player2 = Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
+    music_player1 = Music("musica_easy/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
+    music_player2 = Music("musica_easy/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
+    
+    # music_player1 = Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
+    # music_player2 = Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
     
     # Iniciar a música
     music_player1.tocar()
@@ -118,10 +121,10 @@ def main():
     ataque_personagem2 = False
     tempo_morte_p1 = None
     tempo_morte_p2 = None
-    tempo_espera_game_over = 2000  # Tempo em milissegundos antes de exibir a tela de fim de jogo
-    
+    tempo_espera_game_over = 5000  # Tempo em milissegundos antes de exibir a tela de fim de jogo
+    tempo_espera_round = 2000
+    tempo_rodando = pygame.time.get_ticks()
     rodando = True
-    cont = 0
     
     while rodando:
         delta_tempo = RELOGIO.tick(FPS) / 1000.0  # Delta de tempo em segundos
@@ -130,40 +133,19 @@ def main():
         for evento in pygame.event.get():
             if evento.type == pygame.QUIT:
                 rodando = False
-            # if evento.type == pygame.KEYDOWN:
-            #     # Controle do Personagem 1
-            #     if evento.key == pygame.K_SPACE:  # Pressione Espaço para simular dano
-            #         gerenciador_personagens.personagem2.atacar()
-            #         ataque_personagem2 = True
-            #         if gerenciador_personagens.personagem1.vida.vida_atual == 0 and tempo_morte_p1 is None:
-            #             tempo_morte_p1 = pygame.time.get_ticks()
-            #     if evento.key == pygame.K_r:  # Pressione R para reiniciar a vida
-            #         gerenciador_personagens.personagem1.vida.vida_atual = gerenciador_personagens.personagem1.vida.max_vida
-            #         gerenciador_personagens.personagem1.vida.atualizar_sprite()
-            #         tempo_morte_p1 = None
+            if evento.type == pygame.KEYDOWN:
+                if evento.key == pygame.K_e:  # Pressione E para carregar o especial
+                    gerenciador_personagens.personagem1.especial.aumentar_especial(1)
+                if evento.key == pygame.K_q and gerenciador_personagens.personagem1.especial.especial_atual == gerenciador_personagens.personagem1.especial.max_especial:
+                    gerenciador_personagens.personagem1.especial.especial_atual = 0
+                    gerenciador_personagens.personagem1.especial.atualizar_sprite()
 
-            #     if evento.key == pygame.K_e:  # Pressione E para carregar o especial
-            #         gerenciador_personagens.personagem1.especial.aumentar_especial(1)
-            #     if evento.key == pygame.K_q and gerenciador_personagens.personagem1.especial.especial_atual == gerenciador_personagens.personagem1.especial.max_especial:
-            #         gerenciador_personagens.personagem1.especial.especial_atual = 0
-            #         gerenciador_personagens.personagem1.especial.atualizar_sprite()
-
-            #     # Controle do Personagem 2
-            #     if evento.key == pygame.K_f:  # Pressione F para o personagem2 atacar
-            #         gerenciador_personagens.personagem2.atacar()
-            #         ataque_personagem1 = True  # Indica que o ataque foi iniciado
-            #         if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
-            #             tempo_morte_p2 = pygame.time.get_ticks()
-            #     if evento.key == pygame.K_t:  # Pressione T para reiniciar a vida
-            #         gerenciador_personagens.personagem2.vida.vida_atual = gerenciador_personagens.personagem2.vida.max_vida
-            #         gerenciador_personagens.personagem2.vida.atualizar_sprite()
-            #         tempo_morte_p2 = None
-
-            #     if evento.key == pygame.K_g:  # Pressione G para carregar o especial
-            #         gerenciador_personagens.personagem2.especial.aumentar_especial(1)
-            #     if evento.key == pygame.K_h and gerenciador_personagens.personagem2.especial.especial_atual == gerenciador_personagens.personagem2.especial.max_especial:
-            #         gerenciador_personagens.personagem2.especial.especial_atual = 0
-            #         gerenciador_personagens.personagem2.especial.atualizar_sprite()
+                # Controle do Personagem 2
+                if evento.key == pygame.K_g:  # Pressione G para carregar o especial
+                    gerenciador_personagens.personagem2.especial.aumentar_especial(1)
+                if evento.key == pygame.K_h and gerenciador_personagens.personagem2.especial.especial_atual == gerenciador_personagens.personagem2.especial.max_especial:
+                    gerenciador_personagens.personagem2.especial.especial_atual = 0
+                    gerenciador_personagens.personagem2.especial.atualizar_sprite()
         
         # Atualização dos Componentes do Piano
         piano_player1.spawn_notes()
@@ -179,40 +161,6 @@ def main():
         score_player2 = piano_player2.get_score_geral()
         
         # Determinação de Ataques Baseados na Pontuação
-        cont += 1 
-        
-        if cont % 200 == 0:
-            print(f"Score Player 1: {score_player1}, Score Player 2: {score_player2}")
-            piano_player1.score = 0
-            piano_player2.score = 0
-            ganhouUltimoRound_player1 = score_player1 > score_player2
-            score_player1=0
-            score_player2=0
-        
-        if score_player1 > score_player2:
-            if cont % 199 == 0:
-                gerenciador_personagens.personagem2.atacar()
-                gerenciador_personagens.personagem2.levar_dano(1)
-                ataque_personagem2 = True
-                if gerenciador_personagens.personagem1.vida.vida_atual == 0 and tempo_morte_p1 is None:
-                    tempo_morte_p1 = pygame.time.get_ticks()
-
-        if score_player2 > score_player1:
-            if cont % 199 == 0:
-                gerenciador_personagens.personagem1.atacar()
-                gerenciador_personagens.personagem1.levar_dano(1)
-                ataque_personagem1 = True
-                if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
-                    tempo_morte_p2 = pygame.time.get_ticks()
-        if score_player1 == 0 and score_player2 == 0:
-            if ganhouUltimoRound_player1:
-                if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
-                    tempo_morte_p2 = pygame.time.get_ticks()
-            else:
-                if gerenciador_personagens.personagem1.vida.vida_atual == 0 and tempo_morte_p1 is None:
-                    tempo_morte_p1 = pygame.time.get_ticks()
-
-            
         
         gerenciador_personagens.atualizar_personagens(delta_tempo)
 
@@ -241,6 +189,45 @@ def main():
                     if esfera.acerto == False:
                          piano_player2.score -= incremento_score
                     controlador_esferas_player_2.remover_esfera(esfera)
+        
+        score_player1 = piano_player1.score
+        score_player2 = piano_player2.score
+        
+        if pygame.time.get_ticks() - tempo_rodando > tempo_espera_round and not gerenciador_personagens.personagem1.morto and not gerenciador_personagens.personagem2.morto:
+            tempo_rodando = pygame.time.get_ticks()
+            
+            if score_player1 > score_player2:
+                    gerenciador_personagens.personagem1.atacar()
+                    gerenciador_personagens.personagem2.levar_dano(1)
+                    ataque_personagem2 = True
+                    if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
+                        gerenciador_personagens.personagem1.correr()
+                        tempo_morte_p2 = pygame.time.get_ticks()
+
+            if score_player2 > score_player1:
+                    gerenciador_personagens.personagem2.atacar()
+                    gerenciador_personagens.personagem1.levar_dano(1)
+                    ataque_personagem1 = True
+                    if gerenciador_personagens.personagem1.vida.vida_atual == 0 and tempo_morte_p1 is None:
+                        gerenciador_personagens.personagem2.correr()
+                        tempo_morte_p1 = pygame.time.get_ticks()
+            
+            if score_player1 == 0 and score_player2 == 0:
+                if ganhouUltimoRound_player1:
+                    if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
+                        tempo_morte_p2 = pygame.time.get_ticks()
+                else:
+                    if gerenciador_personagens.personagem1.vida.vida_atual == 0 and tempo_morte_p1 is None:
+                        tempo_morte_p1 = pygame.time.get_ticks()
+            
+            ganhouUltimoRound_player1 = score_player1 > score_player2
+            
+            piano_player1.score = 0
+            piano_player2.score = 0
+            score_player1=0
+            score_player2=0
+        
+        gerenciador_personagens.atualizar_personagens(delta_tempo)
         
         gerenciador_personagens.desenhar_personagens(TELA)
         piano_player1.desenhar(TELA)
