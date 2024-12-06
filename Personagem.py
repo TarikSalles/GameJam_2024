@@ -63,7 +63,7 @@ class Personagem:
         self.frames = self.animacoes[self.animacao_atual]
         self.frame_atual = 0
         self.contador_tempo = 0
-        self.velocidade_animacao = 0.2  # Velocidade da animação (em segundos)
+        self.velocidade_animacao = 0.1  # Velocidade da animação (em segundos)
 
         # Flags de controle
         self.sofreu_dano = False
@@ -72,10 +72,14 @@ class Personagem:
         # Calcula o tamanho das barras de vida e especial proporcional ao tamanho do personagem
         
         largura_barra = self.tamanho_desejada[0]
-        altura_barra = self.tamanho_desejada[1] * 0.1
-        
-        posicao_vida = (self.posicao[0], self.posicao[1] + self.tamanho_desejada[1] + 5)
+        altura_barra = self.tamanho_desejada[1] * 0.06
+        posicao_vida = (self.posicao[0]-20, self.posicao[1] + 5)
         posicao_especial = (self.posicao[0], self.posicao[1] + self.tamanho_desejada[1] + altura_barra + 10)
+        
+        if self.invert_frames:
+            posicao_vida = (self.posicao[0]+120, self.posicao[1] + 5)
+            posicao_especial = (self.posicao[0]+120, self.posicao[1] + self.tamanho_desejada[1] + altura_barra + 10)
+            
 
         # Inicializa vida e especial com as posições e tamanhos calculados
         self.vida = Vida(

@@ -32,6 +32,14 @@ FONTE = pygame.font.Font(None, 50)
 # Carregar o fundo
 background = pygame.image.load("./sprites/tela/background.png").convert()
 quadro_imagem = pygame.image.load("./sprites/tela/quadro.png").convert_alpha()
+vida_imagem = pygame.image.load("./sprites/tela/vida.png").convert_alpha()
+energia_imagem = pygame.image.load("./sprites/tela/energia.png").convert_alpha()
+
+def redimensionar_vida(tamanho):
+    return pygame.transform.scale(vida_imagem, tamanho)
+
+def redimensionar_energia(tamanho):
+    return pygame.transform.scale(energia_imagem, tamanho)
 
 def redimensionar_quadro(tela_largura, tela_altura):
     return pygame.transform.scale(quadro_imagem, (tela_largura, tela_altura))
@@ -60,15 +68,15 @@ class GerenciadorPersonagens:
     def __init__(self, tela_largura):
         # Inicialize os personagens com suas posições e configurações
         self.personagem1 = Personagem(
-            posicao_personagem=(tela_largura // 2 - 150, 300),
-            tamanho_personagem=(200, 300),
+            posicao_personagem=(tela_largura // 2 - 180, 300),
+            tamanho_personagem=(300, 450),
             caminho_sprites="./sprites/personagem/Jogador_1/",
             nome_personagem="Biker",
             invert_frames=False
         )
         self.personagem2 = Personagem(
-            posicao_personagem=(tela_largura // 2 + 100, 300),
-            tamanho_personagem=(200, 300),
+            posicao_personagem=(tela_largura // 2-40, 300),
+            tamanho_personagem=(300, 450),
             caminho_sprites="./sprites/personagem/Jogador_2/",
             nome_personagem="Punk",
             invert_frames=True
@@ -88,6 +96,9 @@ def main():
     # Inicialização da Música
     music_player1 = Music("musica_easy/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
     music_player2 = Music("musica_hard/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
+    
+    music_player1 = Music("musica_easy/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
+    music_player2 = Music("musica_easy/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
     
     # music_player1 = Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
     # music_player2 = Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
@@ -161,12 +172,12 @@ def main():
         piano_player2.verificar_colisao()
 
         # Atualização Pontuação
-        score_player1 = piano_player1.get_score_geral()
-        score_player2 = piano_player2.get_score_geral()
+        # score_player1 = piano_player1.score
+        # score_player2 = piano_player2.score
         
         # Determinação de Ataques Baseados na Pontuação
         
-        gerenciador_personagens.atualizar_personagens(delta_tempo)
+        # gerenciador_personagens.atualizar_personagens(delta_tempo)
 
         # Redimensiona os personagens com base no tamanho da tela
         tela_largura, tela_altura = TELA.get_size()
@@ -178,11 +189,23 @@ def main():
         # Desenho na tela
         TELA.blit(fundo_redimensionado, (0, 0))  # Desenha o fundo
         
-        largura_quadro = 100          # Defina a largura
-        altura_quadro = 300           # Defina a altura
+        largura_quadro = 1400//2.5          # Defina a largura
+        altura_quadro = 2000//2.5           # Defina a altura
 
         quadro_redimensionado = redimensionar_quadro(largura_quadro, altura_quadro)
-        TELA.blit(quadro_redimensionado, (tela_largura//2, tela_altura//2))  # Desenha o quadro
+        TELA.blit(quadro_redimensionado, (tela_largura//2-250, tela_altura//2-400)) 
+        
+        largura_vida = 430/2
+        altura_vida = 180/2
+        
+        vida_redimensionada = redimensionar_vida((largura_vida, altura_vida))
+        TELA.blit(vida_redimensionada, (tela_largura//2 - 80, tela_altura//2 - 350))
+
+        largura_energia = 730/2
+        altura_energia = 180/2
+        
+        energia_redimensionada = redimensionar_energia((largura_energia, altura_energia))
+        TELA.blit(energia_redimensionada, (tela_largura//2 - 150, tela_altura - 400 ))
         
         for esfera in controlador_esferas_player_1.esferas:
                 esfera.mover() 
@@ -206,7 +229,7 @@ def main():
         
         if pygame.time.get_ticks() - tempo_rodando > tempo_espera_round and not gerenciador_personagens.personagem1.morto and not gerenciador_personagens.personagem2.morto:
             tempo_rodando = pygame.time.get_ticks()
-            
+            print(f"Score Player 1: {score_player1},   Score Player 2: {score_player2}")
             if score_player1 > score_player2:
                     gerenciador_personagens.personagem1.atacar()
                     gerenciador_personagens.personagem2.levar_dano(1)
