@@ -63,7 +63,7 @@ class Personagem:
         self.frames = self.animacoes[self.animacao_atual]
         self.frame_atual = 0
         self.contador_tempo = 0
-        self.velocidade_animacao = 0.1  # Velocidade da animação (em segundos)
+        self.velocidade_animacao = 0.12  # Velocidade da animação (em segundos)
 
         # Flags de controle
         self.sofreu_dano = False

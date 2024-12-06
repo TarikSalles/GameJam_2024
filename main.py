@@ -140,6 +140,7 @@ def main():
     tempo_espera_round = 2000
     tempo_rodando = pygame.time.get_ticks()
     rodando = True
+    round = 1
     
     while rodando:
         delta_tempo = RELOGIO.tick(FPS) / 1000.0  # Delta de tempo em segundos
@@ -230,6 +231,7 @@ def main():
         if pygame.time.get_ticks() - tempo_rodando > tempo_espera_round and not gerenciador_personagens.personagem1.morto and not gerenciador_personagens.personagem2.morto:
             tempo_rodando = pygame.time.get_ticks()
             print(f"Score Player 1: {score_player1},   Score Player 2: {score_player2}")
+            round += 1
             if score_player1 > score_player2:
                     gerenciador_personagens.personagem1.atacar()
                     gerenciador_personagens.personagem2.levar_dano(1)
