@@ -118,6 +118,7 @@ def main():
     tempo_espera_game_over = 2000  # Tempo em milissegundos antes de exibir a tela de fim de jogo
     
     rodando = True
+    cont = 0
     
     while rodando:
         delta_tempo = RELOGIO.tick(FPS) / 1000.0  # Delta de tempo em segundos
@@ -175,7 +176,14 @@ def main():
         score_player2 = piano_player2.get_score_geral()
         
         # Determinação de Ataques Baseados na Pontuação
-        print("Scorre", score_player1, score_player2)
+        cont += 1 
+        
+        if cont % 200 == 0:
+            # print(f"Score Player 1: {score_player1}, Score Player 2: {score_player2}")
+            piano_player1.score = 0
+            piano_player2.score = 0
+            score_player1=0
+            score_player2=0
         
         if score_player1 > score_player2:
             gerenciador_personagens.personagem2.atacar()
@@ -189,7 +197,6 @@ def main():
             if gerenciador_personagens.personagem2.vida.vida_atual == 0 and tempo_morte_p2 is None:
                 tempo_morte_p2 = pygame.time.get_ticks()
         
-        # if 
         gerenciador_personagens.atualizar_personagens(delta_tempo)
         
         # Aplicação de Dano Após o Ataque Completar
