@@ -45,7 +45,7 @@ class Piano:
         self.min = 0
         self.teclas_processadas = {tecla: False for tecla in self.teclas}  # Inicializa como não processadas
 
-        self.ball_speed = -2
+        self.ball_speed = -5
         self.y_hitbox = self.init_y + self.init_y + self.tamanho_hitbox * 3
         self.hitboxes = [
             pygame.Rect(linha - self.tamanho_hitbox // 2, self.y_hitbox, self.tamanho_hitbox, self.tamanho_hitbox)
@@ -158,7 +158,7 @@ class Piano:
         # Use o tempo da música para calcular o tempo atual
         current_time = pygame.mixer.music.get_pos() / 1000.0  # Tempo da música em segundos
       
-        if self.music.notes and self.music.notes[0]["time"] <= current_time + 2:  # Spawn 2s antes
+        if self.music.notes and self.music.notes[0]["time"] <= current_time + 2.1:  # Spawn 2s antes
            
             note = self.music.notes.pop(0)
             note_instance = {"time": note["time"], "x": note["x"], "y": 0, "line": int(note["y"] * 4), "color": note["color"]}

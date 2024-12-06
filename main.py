@@ -86,8 +86,8 @@ class GerenciadorPersonagens:
 def main():
     # Inicialização das Classes
     # Inicialização da Música
-    music_player1 = Music("musica_hard/Info.dat", "musica_hard/EasyStandard.dat", "musica_hard/song.mp3")
-    music_player2 = Music("musica_hard/Info.dat", "musica_hard/EasyStandard.dat", "musica_hard/song.mp3")
+    music_player1 = Music("musica_easy/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
+    music_player2 = Music("musica_hard/Info.dat", "musica_easy/EasyStandard.dat", "musica_easy/song.mp3")
     
     # music_player1 = Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
     # music_player2 = Music("Info.dat", "ExpertPlusStandard.dat", "miser.mp3")
