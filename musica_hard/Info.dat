@@ -1,0 +1,63 @@
+{
+  "_version": "2.1.0",
+  "_songName": "Harder, Better, Faster, Stronger!",
+  "_songSubName": "",
+  "_songAuthorName": "Daft Punk",
+  "_levelAuthorName": "daa7654321 aka DAA",
+  "_beatsPerMinute": 123.0,
+  "_songTimeOffset": 0.0,
+  "_shuffle": 0.0,
+  "_shufflePeriod": 0.5,
+  "_previewStartTime": 21.0,
+  "_previewDuration": 18.0,
+  "_songFilename": "Daft Punk - Harder, Better, Faster, Stronger.egg",
+  "_coverImageFilename": "DAFT-PUNK.JPG",
+  "_environmentName": "DefaultEnvironment",
+  "_allDirectionsEnvironmentName": "GlassDesertEnvironment",
+  "_environmentNames": [],
+  "_colorSchemes": [],
+  "_customData": {
+    "_editors": {
+      "_lastEditedBy": "ChroMapper",
+      "ChroMapper": {
+        "version": "0.9.661"
+      }
+    }
+  },
+  "_difficultyBeatmapSets": [
+    {
+      "_beatmapCharacteristicName": "Lawless",
+      "_difficultyBeatmaps": [
+        {
+          "_difficulty": "ExpertPlus",
+          "_difficultyRank": 9,
+          "_beatmapFilename": "ExpertPlusLawless.dat",
+          "_noteJumpMovementSpeed": 16.0,
+          "_noteJumpStartBeatOffset": 0.0,
+          "_beatmapColorSchemeIdx": 0,
+          "_environmentNameIdx": 0,
+          "_customData": {
+            "_difficultyLabel": "Automapper idk why"
+          }
+        }
+      ]
+    },
+    {
+      "_beatmapCharacteristicName": "Standard",
+      "_difficultyBeatmaps": [
+        {
+          "_difficulty": "ExpertPlus",
+          "_difficultyRank": 9,
+          "_beatmapFilename": "ExpertPlusStandard.dat",
+          "_noteJumpMovementSpeed": 18.0,
+          "_noteJumpStartBeatOffset": 1.0,
+          "_beatmapColorSchemeIdx": 0,
+          "_environmentNameIdx": 0,
+          "_customData": {
+            "_difficultyLabel": "DAA's Expert"
+          }
+        }
+      ]
+    }
+  ]
+}
