@@ -31,6 +31,10 @@ FONTE = pygame.font.Font(None, 50)
 
 # Carregar o fundo
 background = pygame.image.load("./sprites/tela/background.png").convert()
+quadro_imagem = pygame.image.load("./sprites/tela/quadro.png").convert_alpha()
+
+def redimensionar_quadro(tela_largura, tela_altura):
+    return pygame.transform.scale(quadro_imagem, (tela_largura, tela_altura))
 
 # Função para redimensionar o fundo
 def redimensionar_fundo(tela_largura, tela_altura):
@@ -173,6 +177,13 @@ def main():
 
         # Desenho na tela
         TELA.blit(fundo_redimensionado, (0, 0))  # Desenha o fundo
+        
+        largura_quadro = 100          # Defina a largura
+        altura_quadro = 300           # Defina a altura
+
+        quadro_redimensionado = redimensionar_quadro(largura_quadro, altura_quadro)
+        TELA.blit(quadro_redimensionado, (tela_largura//2, tela_altura//2))  # Desenha o quadro
+        
         for esfera in controlador_esferas_player_1.esferas:
                 esfera.mover() 
                 if (esfera.update()):
